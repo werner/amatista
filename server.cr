@@ -6,8 +6,9 @@ module Server
     getter params
 
     def initialize
-      @params  = {} of String => Array(String)
-      @actions = {} of String => Hash(String, Array(String)) -> String
+      @params   = {} of String => Array(String)
+      @actions  = {} of Tuple => Hash(String, Array(String)) -> String
+      @location = ""
     end
 
     def run(port)
@@ -16,11 +17,13 @@ module Server
           p request
           @params = CGI.parse(request.body.to_s)
 
-          if @actions.has_key?(request.path.to_s)
-            if request.method == "GET"
-              HTTP::Response.ok "text/html", @actions[request.path.to_s].call(@params)
+          action = { request.method, request.path.to_s }
+
+          if @actions.has_key?(action)
+            if action[0] == "GET"
+              HTTP::Response.ok "text/html", @actions[action].call(@params)
             else
-              HTTP::Response.new 307, @actions[request.path.to_s].call(@params)
+              HTTP::Response.new 307, @actions[action].call(@params), HTTP::Headers{"Location": @location}
             end
           else
             HTTP::Response.not_found
@@ -34,13 +37,13 @@ module Server
 
     {% for method in %w(get post put delete patch) %}
       def {{method.id}}(route, &block : Hash(String, Array(String)) -> String)
-        @actions[route.to_s] = block
+        @actions[{"{{method.id}}".upcase, route.to_s}] = block
         yield(params)
       end
     {% end %}
 
     def redirect_to(route)
-      @actions[route].call(@params)
+      @location = route
     end
   end
 end
