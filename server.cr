@@ -9,6 +9,7 @@ module Server
       @params   = {} of String => Array(String)
       @actions  = {} of Tuple => Hash(String, Array(String)) -> String
       @location = ""
+      @method   = nil
     end
 
     def run(port)
@@ -17,12 +18,14 @@ module Server
           p request
           @params = CGI.parse(request.body.to_s)
 
-          action = { request.method, request.path.to_s }
+          action = { @method || request.method, request.path.to_s }
 
           if @actions.has_key?(action)
             if action[0] == "GET"
+              @method = nil
               HTTP::Response.ok "text/html", @actions[action].call(@params)
             else
+              @method = "GET"
               HTTP::Response.new 307, @actions[action].call(@params), HTTP::Headers{"Location": @location}
             end
           else
