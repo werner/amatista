@@ -12,19 +12,21 @@ module Server
 
     def run(port)
       server = HTTP::Server.new port, do |request|
-        p request
-        @params = CGI.parse(request.body.to_s)
+        begin
+          p request
+          @params = CGI.parse(request.body.to_s)
 
-        if @actions.has_key?(request.path.to_s)
-          if request.method == "GET"
-            HTTP::Response.ok "text/html", @actions[request.path.to_s].call(@params)
-          elsif %w(POST PUT DELETE PATCH).includes? request.method
-            HTTP::Response.new 307, @actions[request.path.to_s].call(@params)
+          if @actions.has_key?(request.path.to_s)
+            if request.method == "GET"
+              HTTP::Response.ok "text/html", @actions[request.path.to_s].call(@params)
+            else
+              HTTP::Response.new 307, @actions[request.path.to_s].call(@params)
+            end
           else
-            HTTP::Response.error "text/plain", "Error"
+            HTTP::Response.not_found
           end
-        else
-          HTTP::Response.not_found
+        rescue
+          HTTP::Response.error "text/plain", "Error"
         end
       end
       server.listen
