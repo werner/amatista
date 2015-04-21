@@ -63,9 +63,11 @@ module Server
 
     def initialize(@method, @path, @block)
       @params = {} of String => Array(String)
+      @request_path = ""
     end
 
     def get_params
+      extract_params_from_path
       @params
     end
 
@@ -85,10 +87,10 @@ module Server
     end
 
     private def extract_params_from_path
-      params = @request_path.to_s.scan(/(:\w*)/).map(&.[](0))
-      pairs  = @path.split("/").zip(path.split("/"))
-      pairs.select{|pair| params.includes?(pair)}.each do |p|
-        @params[p.first] = p.last
+      params = @path.to_s.scan(/(:\w*)/).map(&.[](0))
+      pairs  = @path.split("/").zip(@request_path.split("/"))
+      pairs.select{|pair| params.includes?(pair[0])}.each do |p|
+        @params[p[0]] = [p[1]]
       end
     end
   end
