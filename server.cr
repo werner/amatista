@@ -41,10 +41,7 @@ module Server
 
     {% for method in %w(get post put delete patch) %}
       def {{method.id}}(route, &block : Hash(String, Array(String)) -> String)
-        @actions << Response.new("{{method.id}}".upcase, 
-                                 route.to_s, 
-                                 route.to_s.scan(/(:.+?(?=\/))/).map(&.[](0)), 
-                                 block)
+        @actions << Response.new("{{method.id}}".upcase, route.to_s, block)
         yield(params)
       end
     {% end %}
@@ -65,10 +62,16 @@ module Server
     end
 
     def get_params
+      @params_from_request
     end
 
     def match_path?(path)
-      return true
+      route_to_match = Regex.new(@path.to_s.gsub(/(:.+?(?=\/))/, ".*"))
+      path.match(route_to_match)
+    end
+
+    def extract_params(path)
+      path.to_s.scan(/(:.+?(?=\/))/).map(&.[](0))
     end
   end
 end
