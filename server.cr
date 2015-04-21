@@ -20,20 +20,19 @@ module Server
           action = @actions.find {|response| response.method == (@method || request.method) && 
                                              response.match_path?(request.path.to_s) }
 
-          if action
-            action.params_from_request = CGI.parse(request.body.to_s)
-            case action.method
-            when "GET"
-              @method = nil
-              HTTP::Response.ok "text/html", action.block.call(action.get_params)
-            when "POST", "PUT", "DELETE", "PATCH"
-              @method = "GET"
-              HTTP::Response.new 307, action.block.call(action.get_params), HTTP::Headers{"Location": @location}
-            else
-              raise "Path not Found"
-            end
+          return HTTP::Response.not_found unless action
+
+          action.params_from_request = CGI.parse(request.body.to_s)
+
+          case action.method
+          when "GET"
+            @method = nil
+            HTTP::Response.ok "text/html", action.block.call(action.get_params)
+          when "POST", "PUT", "DELETE", "PATCH"
+            @method = "GET"
+            HTTP::Response.new 307, action.block.call(action.get_params), HTTP::Headers{"Location": @location}
           else
-            HTTP::Response.not_found
+            raise "Path not Found"
           end
         rescue
           HTTP::Response.error "text/plain", "Error"
