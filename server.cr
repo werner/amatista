@@ -69,12 +69,16 @@ module Server
     end
 
     def match_path?(path)
-      route_to_match = Regex.new(@path.to_s.gsub(/(:.+?(?=\/))/, ".*"))
-      path.match(route_to_match)
+      if path == "/"
+        @path == "/"
+      elsif @path != "/"
+        route_to_match = Regex.new(@path.to_s.gsub(/(:\w*)/, ".*"))
+        path.match(route_to_match)
+      end
     end
 
     def extract_params(path)
-      path.to_s.scan(/(:.+?(?=\/))/).map(&.[](0))
+      path.to_s.scan(/(:\w*)/).map(&.[](0))
     end
   end
 end
