@@ -58,7 +58,8 @@ module Server
     property block
     setter params_from_request
 
-    def initialize(@method, @path, @params, @block)
+    def initialize(@method, @path, @block)
+      @params_from_request = {} of String => Array(String)
     end
 
     def get_params
