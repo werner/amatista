@@ -22,12 +22,15 @@ module Server
 
           if action
             action.params_from_request = CGI.parse(request.body.to_s)
-            if action.path == "GET"
+            case action.method
+            when "GET"
               @method = nil
               HTTP::Response.ok "text/html", action.block.call(action.get_params)
-            else
+            when "POST", "PUT", "DELETE", "PATCH"
               @method = "GET"
               HTTP::Response.new 307, action.block.call(action.get_params), HTTP::Headers{"Location": @location}
+            else
+              raise "Path not Found"
             end
           else
             HTTP::Response.not_found
