@@ -69,9 +69,9 @@ module Server
     end
 
     def match_path?(path)
-      if path == "/"
-        @path == "/"
-      elsif @path != "/"
+      if @path == "/"
+        path == "/"
+      else
         route_to_match = Regex.new(@path.to_s.gsub(/(:\w*)/, ".*"))
         path.match(route_to_match)
       end
