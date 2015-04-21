@@ -22,7 +22,9 @@ module Server
 
           return HTTP::Response.not_found unless action
 
-          action.params_from_request = CGI.parse(request.body.to_s)
+          action.request_path = request.path.to_s
+
+          action.add_params(CGI.parse(request.body.to_s))
 
           case action.method
           when "GET"
@@ -56,16 +58,15 @@ module Server
   class Response
     property path
     property method
-    property params
     property block
-    setter params_from_request
+    property request_path
 
     def initialize(@method, @path, @block)
-      @params_from_request = {} of String => Array(String)
+      @params = {} of String => Array(String)
     end
 
     def get_params
-      @params_from_request
+      @params
     end
 
     def match_path?(path)
@@ -77,8 +78,18 @@ module Server
       end
     end
 
-    def extract_params(path)
-      path.to_s.scan(/(:\w*)/).map(&.[](0))
+    def add_params(params)
+      params.each do |key, value|
+        @params[key] = value
+      end
+    end
+
+    private def extract_params_from_path
+      params = @request_path.to_s.scan(/(:\w*)/).map(&.[](0))
+      pairs  = @path.split("/").zip(path.split("/"))
+      pairs.select{|pair| params.includes?(pair)}.each do |p|
+        @params[p.first] = p.last
+      end
     end
   end
 end
