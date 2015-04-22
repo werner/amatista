@@ -1,7 +1,7 @@
 require "cgi"
 require "http/server"
 
-module Amatista
+module Server
   class Base
     getter params
 
