@@ -16,7 +16,14 @@ module Server
         begin
           p request
 
-          action = @actions.find {|response| response.match_path?(request.path.to_s) }
+          action = if request.path.to_s.match(/.js|.css/)
+                     file = File.join(Dir.working_directory, request.path.to_s)
+                     Response.new("GET", 
+                                  request.path.to_s, 
+                                  ->(x : Hash(String, Array(String))){ File.read(file) }) if File.exists?(file)
+                   else
+                     @actions.find {|response| response.match_path?(request.path.to_s) }
+                   end
 
           return HTTP::Response.not_found unless action
 
