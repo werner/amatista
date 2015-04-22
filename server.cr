@@ -26,13 +26,15 @@ module Server
 
           action.add_params(CGI.parse(request.body.to_s))
 
+          @params = action.get_params
+
           case action.method
           when "GET"
             @method = nil
-            HTTP::Response.ok "text/html", action.block.call(action.get_params)
+            HTTP::Response.ok "text/html", action.block.call(@params)
           when "POST", "PUT", "DELETE", "PATCH"
             @method = "GET"
-            HTTP::Response.new 307, action.block.call(action.get_params), HTTP::Headers{"Location": @location}
+            HTTP::Response.new 307, action.block.call(@params), HTTP::Headers{"Location": @location}
           else
             raise "Path not Found"
           end
@@ -46,7 +48,7 @@ module Server
     {% for method in %w(get post put delete patch) %}
       def {{method.id}}(route, &block : Hash(String, Array(String)) -> String)
         @actions << Response.new("{{method.id}}".upcase, route.to_s, block)
-        yield(params)
+        yield(@params)
       end
     {% end %}
 
@@ -90,7 +92,7 @@ module Server
       params = @path.to_s.scan(/(:\w*)/).map(&.[](0))
       pairs  = @path.split("/").zip(@request_path.split("/"))
       pairs.select{|pair| params.includes?(pair[0])}.each do |p|
-        @params[p[0]] = [p[1]]
+        @params[p[0].gsub(/:/, "")] = [p[1]]
       end
     end
   end
