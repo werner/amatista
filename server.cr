@@ -9,7 +9,6 @@ module Server
       @params   = {} of String => Array(String)
       @actions  = [] of Response
       @location = ""
-      @method   = nil
     end
 
     def run(port)
@@ -17,23 +16,18 @@ module Server
         begin
           p request
 
-          action = @actions.find {|response| response.method == (@method || request.method) && 
-                                             response.match_path?(request.path.to_s) }
+          action = @actions.find {|response| response.match_path?(request.path.to_s) }
 
           return HTTP::Response.not_found unless action
 
           action.request_path = request.path.to_s
-
           action.add_params(CGI.parse(request.body.to_s))
-
           @params = action.get_params
 
           case action.method
           when "GET"
-            @method = nil
             HTTP::Response.ok "text/html", action.block.call(@params)
           when "POST", "PUT", "DELETE", "PATCH"
-            @method = "GET"
             HTTP::Response.new 307, action.block.call(@params), HTTP::Headers{"Location": @location}
           else
             raise "Path not Found"
