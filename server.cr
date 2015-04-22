@@ -36,8 +36,8 @@ module Server
           else
             raise "Path not Found"
           end
-        rescue
-          HTTP::Response.error "text/plain", "Error"
+        rescue e
+          HTTP::Response.error "text/plain", "Error: #{e}"
         end
       end
       server.listen
