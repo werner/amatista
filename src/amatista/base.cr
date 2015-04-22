@@ -1,8 +1,8 @@
 require "cgi"
 require "http/server"
-require "response.cr"
+require "./response"
 
-class Base
+class Amatista::Base
   getter params
 
   def initialize

@@ -1,4 +1,4 @@
-class Response
+class Amatista::Response
   property path
   property method
   property block
