@@ -8,11 +8,14 @@ class Amatista::Request < HTTP::Request
     super(@method, @path, HTTP::Headers.new)
   end
 
+  # Get personalized params from routes defined by user
   def get_params
     extract_params_from_path
     @params
   end
 
+  # Search for similar paths
+  # Ex. /tasks/edit/:id == /tasks/edit/2
   def match_path?(path)
     return path == "/" if @path == "/"
 
@@ -20,6 +23,7 @@ class Amatista::Request < HTTP::Request
     path.match(route_to_match)
   end
 
+  # Add personalized params to the coming from requests
   def add_params(params)
     params.each do |key, value|
       @params[key] = value

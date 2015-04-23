@@ -22,7 +22,7 @@ class Amatista::Base
                                 request.path.to_s, 
                                 ->(x : Hash(String, Array(String))){ File.read(file) }) if File.exists?(file)
                  else
-                   @actions.find {|request| request.match_path?(request.path.to_s) }
+                   @actions.find {|action_request| action_request.match_path?(request.path.to_s) }
                  end
 
         return HTTP::Response.not_found unless action
