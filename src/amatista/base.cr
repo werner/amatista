@@ -1,6 +1,7 @@
 require "cgi"
 require "http/server"
 require "./request"
+require "./response"
 
 class Amatista::Base
   getter params
@@ -16,14 +17,7 @@ class Amatista::Base
       begin
         p request
 
-        action = if request.path.to_s.match(/.js|.css/)
-                   file = File.join(Dir.working_directory, request.path.to_s)
-                   Request.new("GET", 
-                                request.path.to_s, 
-                                ->(x : Hash(String, Array(String))){ File.read(file) }) if File.exists?(file)
-                 else
-                   @actions.find {|action_request| action_request.match_path?(request.path.to_s) }
-                 end
+        action = Response.new.process_request(request, @actions)
 
         return HTTP::Response.not_found unless action
 
