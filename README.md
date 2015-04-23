@@ -25,5 +25,3 @@ app.run 3000
 
 ```
 ##### [Example](https://github.com/werner/todo_crystal)
-
-##### [Check](http://localhost:3000)
