@@ -1,12 +1,11 @@
-class Amatista::Response
-  property path
-  property method
+class Amatista::Request < HTTP::Request
   property block
   property request_path
 
   def initialize(@method, @path, @block)
     @params = {} of String => Array(String)
     @request_path = ""
+    super(@method, @path, HTTP::Headers.new)
   end
 
   def get_params

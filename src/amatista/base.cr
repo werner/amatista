@@ -1,13 +1,13 @@
 require "cgi"
 require "http/server"
-require "./response"
+require "./request"
 
 class Amatista::Base
   getter params
 
   def initialize
     @params   = {} of String => Array(String)
-    @actions  = [] of Response
+    @actions  = [] of Request
     @location = ""
   end
 
@@ -18,11 +18,11 @@ class Amatista::Base
 
         action = if request.path.to_s.match(/.js|.css/)
                    file = File.join(Dir.working_directory, request.path.to_s)
-                   Response.new("GET", 
+                   Request.new("GET", 
                                 request.path.to_s, 
                                 ->(x : Hash(String, Array(String))){ File.read(file) }) if File.exists?(file)
                  else
-                   @actions.find {|response| response.match_path?(request.path.to_s) }
+                   @actions.find {|request| request.match_path?(request.path.to_s) }
                  end
 
         return HTTP::Response.not_found unless action
@@ -48,7 +48,7 @@ class Amatista::Base
 
   {% for method in %w(get post put delete patch) %}
     def {{method.id}}(route, &block : Hash(String, Array(String)) -> String)
-      @actions << Response.new("{{method.id}}".upcase, route.to_s, block)
+      @actions << Request.new("{{method.id}}".upcase, route.to_s, block)
       yield(@params)
     end
   {% end %}
