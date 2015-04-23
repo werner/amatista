@@ -32,7 +32,6 @@ install: |
   export CRYSTAL_CONFIG_VERSION=ci
 script:
   - crystal spec
-  - find samples -name "*.cr" | xargs -L 1 ./bin/crystal build --no-build
 branches:
   only:
     - master
