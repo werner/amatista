@@ -8,7 +8,7 @@ class Amatista::Base
 
   def initialize
     @params   = {} of String => Array(String)
-    @actions  = [] of Request
+    @routes  = [] of Request
     @location = ""
   end
 
@@ -19,14 +19,14 @@ class Amatista::Base
 
         response = Response.new(request)
 
-        action = response.process_static(request.path.to_s)
-        action = response.find_action(@actions) unless action
+        route = response.process_static(request.path.to_s)
+        route = response.find_route(@routes) unless route
 
-        return HTTP::Response.not_found unless action
+        return HTTP::Response.not_found unless route
 
-        @params = response.process_params(action)
+        @params = response.process_params(route)
 
-        response.process_request(action, @params, @location)
+        response.process_request(route, @params, @location)
 
       rescue e
         HTTP::Response.error "text/plain", "Error: #{e}"
@@ -37,7 +37,7 @@ class Amatista::Base
 
   {% for method in %w(get post put delete patch) %}
     def {{method.id}}(route, &block : Hash(String, Array(String)) -> String)
-      @actions << Request.new("{{method.id}}".upcase, route.to_s, block)
+      @routes << Request.new("{{method.id}}".upcase, route.to_s, block)
       yield(@params)
     end
   {% end %}
