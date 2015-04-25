@@ -19,8 +19,13 @@ class Amatista::Request < HTTP::Request
   def match_path?(path)
     return path == "/" if @path == "/"
 
-    route_to_match = Regex.new(@path.to_s.gsub(/(:\w*)/, ".*"))
-    path.match(route_to_match)
+    original_path = @path.split("/")
+    path_to_match = path.split("/")
+
+    original_path.length == path_to_match.length &&
+      original_path.zip(path_to_match).all? do |item|
+        item[0].match(/(:\w*)/) ? true : item[0] == item[1] 
+      end
   end
 
   # Add personalized params to the coming from requests

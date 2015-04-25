@@ -36,13 +36,13 @@ class Amatista::Base
   end
 
   {% for method in %w(get post put delete patch) %}
-    def {{method.id}}(route, &block : Hash(String, Array(String)) -> String)
-      @routes << Request.new("{{method.id}}".upcase, route.to_s, block)
+    def {{method.id}}(path, &block : Hash(String, Array(String)) -> String)
+      @routes << Request.new("{{method.id}}".upcase, path.to_s, block)
       yield(@params)
     end
   {% end %}
 
-  def redirect_to(route)
-    @location = route
+  def redirect_to(path)
+    @location = path
   end
 end
