@@ -5,7 +5,7 @@ describe Base do
     app = Base.new
     
     html_result = "<html><body>Hello World</body></html>"
-    app.get("/") { html_result }.should eq(html_result)
+    app.get("/") { app.respond_to(:html, html_result) }.body.should eq(html_result)
   end
 
   context "#process" do
@@ -13,7 +13,7 @@ describe Base do
       app = Base.new
 
       html_result = "<html><body>Hello World</body></html>"
-      app.get("/") { html_result }
+      app.get("/") { app.respond_to(:html, html_result) }
 
       headers = HTTP::Headers.new
       headers["Host"] = "host.domain.com"
@@ -21,7 +21,9 @@ describe Base do
 
       request = HTTP::Request.new "GET", "/", headers
 
-      app.process(request).body.should eq("<html><body>Hello World</body></html>")
+      response = app.process(request)
+
+      response.class.should eq(HTTP::Response)
     end
   end
 end
