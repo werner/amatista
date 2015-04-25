@@ -18,7 +18,8 @@ require "amatista"
 app = Amatista::Base.new
 
 app.get "/" do
-  %(Hello World)
+  html = %(<h1> Hello World </h1>)
+  app.respond_to(:html, html)
 end
 
 app.run 3000
