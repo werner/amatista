@@ -9,11 +9,13 @@ class Amatista::Response
   end
 
   def process_static(path)
-    if path.match(/.js|.css/)
-      file = File.join(Dir.working_directory, path)
-      Route.new("GET", path, 
-                 ->(x : Hash(String, Array(String))){ HTTP::Response.ok "text/html", File.read(file) }) if File.exists?(file)
-    end
+    content_type = "application/javascript" if path.match(/\.js/)
+    content_type = "text/css" if path.match(/\.css/)
+    return if content_type.nil?
+
+    file = File.join(Dir.working_directory, path)
+    Route.new("GET", path, 
+               ->(x : Hash(String, Array(String))){ HTTP::Response.ok content_type, File.read(file) }) if File.exists?(file)
   end
 
   def process_params(route)
