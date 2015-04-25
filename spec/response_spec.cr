@@ -8,10 +8,9 @@ describe Response do
         routes <<  Route.new("GET", "/tasks/#{n}", ->(x : Hash(String, Array(String))){})
       end
 
-      route = Response.find_route(routes, "/tasks/new")
+      route = Response.find_route(routes, "GET", "/tasks/new")
 
       route.path.should eq("/tasks/new") if route
-
     end
 
     it "does not find path" do
@@ -20,9 +19,22 @@ describe Response do
         routes <<  Route.new("GET", "/tasks/#{n}", ->(x : Hash(String, Array(String))){})
       end
 
-      route = Response.find_route(routes, "/tasks/edit")
+      route = Response.find_route(routes, "GET", "/tasks/edit")
 
       route.should be_nil
+    end
+
+    it "find the right path" do
+      routes = [Route.new("GET", "/tasks", ->(x : Hash(String, Array(String))){}), 
+                Route.new("POST", "/tasks", ->(x : Hash(String, Array(String))){})]
+
+
+      route = Response.find_route(routes, "GET", "/tasks")
+
+      if route
+        route.method.should eq("GET")
+        route.path.should eq("/tasks")
+      end
     end
   end
 

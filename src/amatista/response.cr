@@ -4,8 +4,8 @@ class Amatista::Response
   def initialize(@request)
   end
 
-  def self.find_route(routes, path_to_find)
-    routes.find {|route_request| route_request.match_path?(path_to_find) }
+  def self.find_route(routes, method, path_to_find)
+    routes.find {|route_request| route_request.method == method && route_request.match_path?(path_to_find) }
   end
 
   def process_static(path)

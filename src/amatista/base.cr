@@ -22,7 +22,7 @@ class Amatista::Base
       response = Response.new(request)
 
       route = response.process_static(request.path.to_s)
-      route = Response.find_route(@routes, request.path.to_s) unless route
+      route = Response.find_route(@routes, request.method, request.path.to_s) unless route
 
       return HTTP::Response.not_found unless route
 
