@@ -10,8 +10,12 @@ class Amatista::Request < HTTP::Request
 
   # Get personalized params from routes defined by user
   def get_params
-    extract_params_from_path
-    @params
+    if @params.empty? || @request_path == ""
+      raise "You need to set params and request_path first"
+    else
+      extract_params_from_path
+      @params
+    end
   end
 
   # Search for similar paths
