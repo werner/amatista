@@ -42,9 +42,9 @@ class Amatista::Base
   {% end %}
 
   def redirect_to(path)
-    route = Response.find_route(@routes, path)
+    route = Response.find_route(@routes, "GET", path)
     raise "#{path} not found" unless route
-    HTTP::Response.new 307, "redirection", HTTP::Headers{"Location": path}
+    HTTP::Response.new 303, "redirection", HTTP::Headers{"Location": path}
   end
 
   def respond_to(context, body)
