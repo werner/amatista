@@ -24,8 +24,9 @@ describe Response do
       route.should be_nil
     end
 
-    it "find the right path" do
+    it "find the GET method route" do
       routes = [Route.new("GET", "/tasks", ->(x : Hash(String, Array(String))){}), 
+                Route.new("PUT", "/tasks", ->(x : Hash(String, Array(String))){}),
                 Route.new("POST", "/tasks", ->(x : Hash(String, Array(String))){})]
 
 
@@ -33,6 +34,19 @@ describe Response do
 
       if route
         route.method.should eq("GET")
+        route.path.should eq("/tasks")
+      end
+    end
+
+    it "find the POST method route" do
+      routes = [Route.new("GET", "/tasks", ->(x : Hash(String, Array(String))){}), 
+                Route.new("POST", "/tasks", ->(x : Hash(String, Array(String))){}),
+                Route.new("DELETE", "/tasks", ->(x : Hash(String, Array(String))){})]
+
+      route = Response.find_route(routes, "POST", "/tasks")
+
+      if route
+        route.method.should eq("POST")
         route.path.should eq("/tasks")
       end
     end
