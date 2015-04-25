@@ -11,8 +11,8 @@ class Amatista::Response
   def process_static(path)
     if path.match(/.js|.css/)
       file = File.join(Dir.working_directory, path)
-      Request.new("GET", path, 
-                   ->(x : Hash(String, Array(String))){ File.read(file) }) if File.exists?(file)
+      Route.new("GET", path, 
+                 ->(x : Hash(String, Array(String))){ File.read(file) }) if File.exists?(file)
     end
   end
 
