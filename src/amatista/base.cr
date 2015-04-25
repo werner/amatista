@@ -50,6 +50,7 @@ class Amatista::Base
   def respond_to(context, body)
     context = case context
               when :html then "text/html"
+              when :json then "text/json"
               else
                 raise "#{context} not available"
               end
