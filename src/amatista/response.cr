@@ -12,7 +12,7 @@ class Amatista::Response
     if path.match(/.js|.css/)
       file = File.join(Dir.working_directory, path)
       Route.new("GET", path, 
-                 ->(x : Hash(String, Array(String))){ File.read(file) }) if File.exists?(file)
+                 ->(x : Hash(String, Array(String))){ HTTP::Response.ok "text/html", File.read(file) }) if File.exists?(file)
     end
   end
 
