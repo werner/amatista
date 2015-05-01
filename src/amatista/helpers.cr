@@ -2,7 +2,7 @@ module Amatista
   module Helpers
 
     def redirect_to(path)
-      route = Response.find_route(@routes, "GET", path)
+      route = Response.find_route($amatista.routes, "GET", path)
       raise "#{path} not found" unless route
       HTTP::Response.new 303, "redirection", HTTP::Headers{"Location": path}
     end
