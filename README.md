@@ -15,12 +15,17 @@ end
 ```
 require "amatista"
 
-app = Amatista::Base.new
-
-app.get "/" do
-  html = %(<h1> Hello World </h1>)
-  app.respond_to(:html, html)
+class HelloWorldController < Amatista::Controller
+  get "/" do
+    html = %(<h1> Hello World </h1>)
+    respond_to(:html, html)
+  end
 end
+
+class Main < Amatista::Base
+end
+
+app = Main.new
 
 app.run 3000
 
