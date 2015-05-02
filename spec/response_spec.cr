@@ -56,7 +56,7 @@ describe Response do
     it "process a js file" do
       headers = HTTP::Headers.new
       headers["Host"] = "host.domain.com"
-      headers["Body"] = nil
+      headers["Body"] = ""
 
       request = HTTP::Request.new "GET", "/", headers
 
@@ -76,7 +76,7 @@ describe Response do
     it "does not process file" do
       headers = HTTP::Headers.new
       headers["Host"] = "host.domain.com"
-      headers["Body"] = nil
+      headers["Body"] = ""
 
       request  = HTTP::Request.new "GET", "/", headers
       response = Response.new(request)
@@ -89,7 +89,7 @@ describe Response do
   context "#process_params" do
       headers = HTTP::Headers.new
       headers["Host"] = "host.domain.com"
-      headers["Body"] = nil
+      headers["Body"] = ""
 
       request  = HTTP::Request.new "GET", "/tasks/edit/2/soon/34", headers
       response = Response.new(request)

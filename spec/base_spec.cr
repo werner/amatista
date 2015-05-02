@@ -8,7 +8,7 @@ describe Base do
 
       headers = HTTP::Headers.new
       headers["Host"] = "host.domain.com"
-      headers["Body"] = nil
+      headers["Body"] = ""
 
       request = HTTP::Request.new "GET", "/", headers
 
