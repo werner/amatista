@@ -21,6 +21,12 @@ module Amatista
       $amatista.sessions[session_hash][key]?
     end
 
+    def has_session
+      return unless request = $amatista.request
+      cookie = request.headers["Cookie"]?.to_s
+      !cookie.split(";").select(&.match(/_amatista_session_id/)).empty?
+    end
+
     private def process_session(string)
       string.split(";").select(&.match(/_amatista_session_id/)).first.gsub(/_amatista_session_id=/,"").gsub(/\s/,"")
     end
