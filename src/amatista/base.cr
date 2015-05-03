@@ -18,7 +18,8 @@ module Amatista
 
         return HTTP::Response.not_found unless route
 
-        $amatista.params = response.process_params(route)
+        $amatista.params  = response.process_params(route)
+        $amatista.request = request
 
         route.block.call($amatista.params)
       rescue e
