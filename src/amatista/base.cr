@@ -1,6 +1,12 @@
 module Amatista
   class Base
 
+    def self.configure
+      configuration = {} of Symbol => String
+      yield(configuration)
+      $amatista.secret_key = configuration[:secret_key]? || ""
+    end
+
     def run(port)
       server = HTTP::Server.new port, do |request|
         p request
