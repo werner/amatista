@@ -33,7 +33,7 @@ module Amatista
       HTTP_X_CLUSTER_CLIENT_IP HTTP_CLIENT_IP HTTP_FORWARDED_FOR HTTP_FORWARDED HTTP_VIA
       REMOTE_ADDR)
 
-      headers.select{|header| request.headers[header]?}.first
+      headers.map{|header| request.headers[header]? as String | Nil}.compact.first
     end
   end
 end
