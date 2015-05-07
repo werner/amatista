@@ -4,7 +4,9 @@ module Amatista
     def self.configure
       configuration = {} of Symbol => String
       yield(configuration)
-      $amatista.secret_key = configuration[:secret_key]? || ""
+      $amatista.secret_key          = configuration[:secret_key]? || ""
+      $amatista.database_connection = configuration[:database_connection]? || ""
+      $amatista.database_driver     = configuration[:database_driver]? || ""
     end
 
     def run(port)
