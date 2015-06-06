@@ -7,7 +7,7 @@ module Amatista
       $amatista.secret_key          = configuration[:secret_key]? || ""
       $amatista.database_connection = configuration[:database_connection]? || ""
       $amatista.database_driver     = configuration[:database_driver]? || ""
-      $amatista.public_dir          = configuration[:public_dir]? || Dir.working_directory
+      $amatista.public_dir          = configuration[:public_dir]? || $amatista.public_dir
     end
 
     def run(port)
