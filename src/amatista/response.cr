@@ -15,10 +15,10 @@ module Amatista
       content_type = "text/css" if path.match(/\.css/)
       return if content_type.empty?
 
-      file = File.join(Dir.working_directory, path)
+      file = File.join($amatista.public_dir, path)
       if File.exists?(file)
-        Route.new("GET", path, 
-                   ->(x : Hash(String, Array(String))){ HTTP::Response.ok(content_type, File.read(file)) }) 
+        Route.new("GET", path,
+                   ->(x : Hash(String, Array(String))){ HTTP::Response.ok(content_type, File.read(file)) })
       end
     end
 

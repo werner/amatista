@@ -12,6 +12,7 @@ module Amatista
     property request
     property database_connection
     property database_driver
+    property public_dir
 
     def initialize
       @params              = {} of String => Array(String)
@@ -22,6 +23,7 @@ module Amatista
       @request             = nil
       @database_connection = ""
       @database_driver     = ""
+      @public_dir          = Dir.working_directory
     end
   end
 end
