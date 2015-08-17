@@ -12,7 +12,7 @@ end
 
 ### Usage
 
-```
+```crystal
 require "amatista"
 
 class HelloWorldController < Amatista::Controller
