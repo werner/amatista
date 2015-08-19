@@ -14,9 +14,9 @@ describe ViewTag do
     it "display a form tag" do
       view = BaseView.new
 
-      view.form_tag("/posts", "post") do
-        view.text_field(:post, :title) +
-        view.text_field(:post, :name)
+      view.form_tag("/posts", "post") do |form|
+        form << view.text_field(:post, :title)
+        form << view.text_field(:post, :name)
       end.should eq("<form action=\"/posts\" method=\"post\">" +
                       "<input type=\"text\" id=\"post_title\" name=\"post[title]\" />" +
                       "<input type=\"text\" id=\"post_name\" name=\"post[name]\" />" +

@@ -19,7 +19,8 @@ module Amatista
       str_result << "<form action=\"#{url}\" method=\"#{method}\""
       str_result << " #{options}" unless options.empty?
       str_result << ">"
-      str_result << yield
+      str_body_result = StringIO.new
+      str_result << yield(str_body_result)
       str_result << "</form>"
       str_result.to_s
     end
