@@ -13,6 +13,15 @@ module Amatista
       str_result.to_s
     end
 
+    def submit_tag(value = "Save", raw_options = [] of Hash(Symbol, String))
+      options = options_transfomed(raw_options)
+      str_result = StringIO.new
+      str_result << "<input name=\"commit\" type=\"submit\" value=\"#{value}\""
+      str_result << " #{options}" unless options.empty?
+      str_result << " />"
+      str_result.to_s
+    end
+
     def form_tag(url, method = "post", raw_options = [] of Hash(Symbol, String))
       options = options_transfomed(raw_options)
       str_result = StringIO.new
