@@ -1,8 +1,10 @@
 require "ecr"
 require "ecr/macros"
+require "./view_tag"
 
 module Amatista
   class BaseView
+    include ViewTag
 
     def initialize(@arguments = nil)
     end
