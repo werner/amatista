@@ -81,5 +81,17 @@ describe ViewTag do
         eq("<input type=\"radio\" id=\"task_accept\" name=\"task[accept]\" value =\"0\" checked =\"checked\" />")
       )
     end
+
+    it "display a select tag" do
+      view = BaseView.new
+
+      view.select_tag("task", "countries", [["1", "USA"], ["2", "CANADA"], ["3", "VENEZUELA"]]).should(
+        eq("<select id=\"task_countries\" name=\"task[countries]\" >" + 
+             "<option value =\"1\">USA</option>" +
+             "<option value =\"2\">CANADA</option>" +
+             "<option value =\"3\">VENEZUELA</option>" +
+           "</select>")
+      )
+    end
   end
 end

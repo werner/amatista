@@ -67,30 +67,16 @@ module Amatista
       str_result.to_s
     end
 
+    def select_tag(object_name, method, collection, raw_options = [] of Hash(Symbol, String))
+      option_tags = extract_option_tags(collection)
+      surrounded_tag(:select, option_tags, raw_options) do |str_result|
+        str_result << " id=\"#{HTML.escape(object_name.to_s)}_#{HTML.escape(method.to_s)}\""
+        str_result << " name=\"#{HTML.escape(object_name.to_s)}[#{HTML.escape(method.to_s)}]\" "
+      end
+    end
+
     def content_tag(tag, value, raw_options = [] of Hash(Symbol, String))
       surrounded_tag(tag, value, raw_options) {}
     end
-
-    private def input_tag(raw_options)
-      options = options_transfomed(raw_options)
-      str_result = StringIO.new
-      yield(str_result)
-      str_result << " #{options}" unless options.empty?
-      str_result << " />"
-      str_result.to_s
-    end
-
-    private def surrounded_tag(tag, value, raw_options)
-      options = options_transfomed(raw_options)
-      str_result = StringIO.new
-      str_result << "<#{tag.to_s}"
-      yield(str_result)
-      str_result << " #{options}" unless options.empty?
-      str_result << ">"
-      str_result << value
-      str_result << "</#{tag.to_s}>"
-      str_result.to_s
-    end
-
   end
 end
