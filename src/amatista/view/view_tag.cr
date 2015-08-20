@@ -14,6 +14,17 @@ module Amatista
       str_result.to_s
     end
 
+    def hidden_tag(object_name, method, value, raw_options = [] of Hash(Symbol, String))
+      options = options_transfomed(raw_options)
+      str_result = StringIO.new
+      str_result << "<input type=\"hidden\" id=\"#{HTML.escape(object_name.to_s)}_#{HTML.escape(method.to_s)}\" "
+      str_result << "name=\"#{HTML.escape(object_name.to_s)}[#{HTML.escape(method.to_s)}]\" "
+      str_result << "value=\"#{HTML.escape(value.to_s)}\""
+      str_result << " #{options}" unless options.empty?
+      str_result << " />"
+      str_result.to_s
+    end
+
     def submit_tag(value = "Save", raw_options = [] of Hash(Symbol, String))
       options = options_transfomed(raw_options)
       str_result = StringIO.new

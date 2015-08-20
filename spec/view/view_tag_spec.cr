@@ -11,6 +11,14 @@ describe ViewTag do
       view.text_field(:post, :title).should eq("<input type=\"text\" id=\"post_title\" name=\"post[title]\" />")
     end
 
+    it "display a hidden field" do
+      view = BaseView.new
+
+      view.hidden_tag(:post, :id, 1).should(
+        eq("<input type=\"hidden\" id=\"post_id\" name=\"post[id]\" value=\"1\" />")
+      )
+    end
+
     it "display a submit button" do
       view = BaseView.new
 
