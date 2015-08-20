@@ -46,6 +46,15 @@ module Amatista
       end
     end
 
+    def radio_button_tag(object_name, method, value = "1", checked = false, raw_options = [] of Hash(Symbol, String))
+      input_tag(raw_options) do |str_result|
+        str_result << "<input type=\"radio\" id=\"#{HTML.escape(object_name.to_s)}_#{HTML.escape(method.to_s)}\" "
+        str_result << "name=\"#{HTML.escape(object_name.to_s)}[#{HTML.escape(method.to_s)}]\" "
+        str_result << "value =\"#{value}\" "
+        str_result << "checked =\"checked\"" if checked
+      end
+    end
+
     def form_tag(url, method = "post", raw_options = [] of Hash(Symbol, String))
       options = options_transfomed(raw_options)
       str_result = StringIO.new

@@ -73,5 +73,13 @@ describe ViewTag do
         eq("<input type=\"checkbox\" id=\"task_accept\" name=\"task[accept]\" value =\"0\" checked =\"checked\" />")
       )
     end
+
+    it "display a radio button tag" do
+      view = BaseView.new
+
+      view.radio_button_tag("task", "accept", "0", true).should(
+        eq("<input type=\"radio\" id=\"task_accept\" name=\"task[accept]\" value =\"0\" checked =\"checked\" />")
+      )
+    end
   end
 end
