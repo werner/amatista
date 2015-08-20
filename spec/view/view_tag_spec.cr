@@ -53,5 +53,11 @@ describe ViewTag do
                          eq("<div class = \"form-control\"><input type=\"text\" id=\"post_title\" name=\"post[title]\" /></div>")
                        )
     end
+
+    it "display a link tag" do
+      view = BaseView.new
+
+      view.link_to("Profile", "/profiles/1").should eq("<a href=\"/profiles/1\">Profile</a>")
+    end
   end
 end

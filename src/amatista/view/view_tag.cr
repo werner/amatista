@@ -25,6 +25,12 @@ module Amatista
       end
     end
 
+    def link_to(name, url, raw_options = [] of Hash(Symbol, String))
+      surrounded_tag(:a, name, raw_options) do |str_result|
+        str_result << " href=\"#{url}\""
+      end
+    end
+
     def form_tag(url, method = "post", raw_options = [] of Hash(Symbol, String))
       options = options_transfomed(raw_options)
       str_result = StringIO.new
@@ -38,14 +44,7 @@ module Amatista
     end
 
     def content_tag(tag, value, raw_options = [] of Hash(Symbol, String))
-      options = options_transfomed(raw_options)
-      str_result = StringIO.new
-      str_result << "<#{tag.to_s}"
-      str_result << " #{options}" unless options.empty?
-      str_result << ">"
-      str_result << value
-      str_result << "</#{tag.to_s}>"
-      str_result.to_s
+      surrounded_tag(tag, value, raw_options) {}
     end
 
     private def input_tag(raw_options)
@@ -54,6 +53,18 @@ module Amatista
       yield(str_result)
       str_result << " #{options}" unless options.empty?
       str_result << " />"
+      str_result.to_s
+    end
+
+    private def surrounded_tag(tag, value, raw_options)
+      options = options_transfomed(raw_options)
+      str_result = StringIO.new
+      str_result << "<#{tag.to_s}"
+      yield(str_result)
+      str_result << " #{options}" unless options.empty?
+      str_result << ">"
+      str_result << value
+      str_result << "</#{tag.to_s}>"
       str_result.to_s
     end
 
