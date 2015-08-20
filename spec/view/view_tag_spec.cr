@@ -20,7 +20,7 @@ describe ViewTag do
     it "display a form tag" do
       view = BaseView.new
 
-      view.form_tag("/posts", "post") do |form|
+      view.form_tag("/posts") do |form|
         form << view.text_field(:post, :title)
         form << view.text_field(:post, :name)
         form << view.submit_tag("Save changes")
