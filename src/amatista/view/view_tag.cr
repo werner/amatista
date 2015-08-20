@@ -26,8 +26,23 @@ module Amatista
     end
 
     def link_to(name, url, raw_options = [] of Hash(Symbol, String))
-      surrounded_tag(:a, name, raw_options) do |str_result|
+      surrounded_tag(:a, HTML.escape(name), raw_options) do |str_result|
         str_result << " href=\"#{url}\""
+      end
+    end
+
+    def label_tag(name, value, raw_options = [] of Hash(Symbol, String))
+      surrounded_tag(:label, HTML.escape(value), raw_options) do |str_result|
+        str_result << " for=\"#{name}\""
+      end
+    end
+
+    def check_box_tag(object_name, method, value = "1", checked = false, raw_options = [] of Hash(Symbol, String))
+      input_tag(raw_options) do |str_result|
+        str_result << "<input type=\"checkbox\" id=\"#{HTML.escape(object_name.to_s)}_#{HTML.escape(method.to_s)}\" "
+        str_result << "name=\"#{HTML.escape(object_name.to_s)}[#{HTML.escape(method.to_s)}]\" "
+        str_result << "value =\"#{value}\" "
+        str_result << "checked =\"checked\"" if checked
       end
     end
 

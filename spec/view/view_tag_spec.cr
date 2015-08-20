@@ -59,5 +59,19 @@ describe ViewTag do
 
       view.link_to("Profile", "/profiles/1").should eq("<a href=\"/profiles/1\">Profile</a>")
     end
+
+    it "display a label tag" do
+      view = BaseView.new
+
+      view.label_tag("name", "Name").should eq("<label for=\"name\">Name</label>")
+    end
+
+    it "display a checkbox tag" do
+      view = BaseView.new
+
+      view.check_box_tag("task", "accept", "0", true).should(
+        eq("<input type=\"checkbox\" id=\"task_accept\" name=\"task[accept]\" value =\"0\" checked =\"checked\" />")
+      )
+    end
   end
 end
