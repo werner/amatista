@@ -30,5 +30,20 @@ describe ViewTag do
                       "<input name=\"commit\" type=\"submit\" value=\"Save changes\" />" +
                     "</form>")
     end
+
+    it "display a paragraph content tag" do
+      view = BaseView.new
+
+      view.content_tag(:p, "Hello world!").should eq("<p>Hello world!</p>")
+    end
+
+    it "display an input text inside a div content tag" do
+      view = BaseView.new
+
+      view.content_tag(:div, view.text_field(:post, :title), 
+                       { class: "form-control" }).should(
+                         eq("<div class = \"form-control\"><input type=\"text\" id=\"post_title\" name=\"post[title]\" /></div>")
+                       )
+    end
   end
 end
