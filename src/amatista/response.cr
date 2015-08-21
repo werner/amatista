@@ -1,4 +1,5 @@
 module Amatista
+  # Use by the framework to return an appropiate response based on the request.
   class Response
     property request
 

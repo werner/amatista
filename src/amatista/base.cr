@@ -1,6 +1,19 @@
 module Amatista
+  # This class is used as a base for running amatista apps.
   class Base
 
+    # Saves the configure options in a global variable
+    #
+    # Example:
+    # ```crystal
+    # class Main < Amatista::Base
+    #   configure do |conf|
+    #     conf[:secret_key]          = "secret"
+    #     conf[:database_driver]     = "postgres"
+    #     conf[:database_connection] = ENV["DATABASE_URL"] 
+    #   end
+    # end
+    # ```
     def self.configure
       configuration = {} of Symbol => String
       yield(configuration)
@@ -10,6 +23,7 @@ module Amatista
       $amatista.public_dir          = configuration[:public_dir]? || $amatista.public_dir
     end
 
+    # Run the server, just needs a port number
     def run(port)
       server = HTTP::Server.new port, do |request|
         p request
@@ -18,6 +32,7 @@ module Amatista
       server.listen
     end
 
+    # Returns a response based on the request client.
     def process(request)
       begin
         response = Response.new(request)

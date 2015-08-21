@@ -1,6 +1,7 @@
 require "./view_helpers"
 
 module Amatista
+  # Methods to create html tags using crystal
   module ViewTag
     include ViewHelpers
     

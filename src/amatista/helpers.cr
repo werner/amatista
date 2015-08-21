@@ -1,12 +1,21 @@
 module Amatista
+  # Helpers used by the methods in the controller class.
   module Helpers
 
+    # Redirects to an url
+    #
+    # Example
+    # ```crystal
+    # redirect_to "/tasks"
+    # ```
     def redirect_to(path)
       route = Response.find_route($amatista.routes, "GET", path)
       raise "#{path} not found" unless route
       HTTP::Response.new 303, "redirection", HTTP::Headers{"Location": path}
     end
 
+    # Makes a respond based on context type
+    # The body argument should be string if used html context type
     def respond_to(context, body)
       context = case context
                 when :html then "text/html"
@@ -17,7 +26,7 @@ module Amatista
       HTTP::Response.new(200, body, process_header(context))
     end
 
-    def process_header(context)
+    private def process_header(context)
       header = HTTP::Headers.new
       header.add("Content-Type", context)
       if !$amatista.sessions.empty? && !has_session
@@ -26,6 +35,7 @@ module Amatista
       header
     end
 
+    # Find out the IP address
     def remote_ip
       return unless request = $amatista.request
 

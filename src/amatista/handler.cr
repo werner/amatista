@@ -3,6 +3,7 @@ require "http/server"
 require "./route"
 
 module Amatista
+  # Use to saves configuration, routes and other data needed for the application. 
   class Handler
     property params
     property routes

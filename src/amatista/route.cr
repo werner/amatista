@@ -1,4 +1,5 @@
 module Amatista
+  # Use by the framework to handle the request params.
   class Route
     property method
     property path
@@ -21,7 +22,7 @@ module Amatista
     end
 
     # Search for similar paths
-    # Ex. /tasks/edit/:id == /tasks/edit/2
+    # Example: /tasks/edit/:id == /tasks/edit/2
     def match_path?(path)
       return path == "/" if @path == "/"
 

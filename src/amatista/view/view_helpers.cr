@@ -1,4 +1,5 @@
 module Amatista
+  # Set of helpers for the tag views
   module ViewHelpers
     private def options_transfomed(options = [] of Hash(Symbol, String))
       options.map do |key, value|
