@@ -13,11 +13,11 @@ module Amatista
     end
 
     def process_static(path)
-      mime_type = Mime.from_ext(File.extname(path)[1..-1]).to_s
+      mime_type = Mime.from_ext(File.extname(path).gsub(".", ""))
       file      = File.join($amatista.public_dir, path)
-      if File.exists?(file)
+      if File.exists?(file) && mime_type
         Route.new("GET", path, 
-                  ->(x : Hash(String, Array(String))) { HTTP::Response.ok(mime_type, File.read(file)) })
+                  ->(x : Hash(String, Array(String))) { HTTP::Response.ok(mime_type.to_s, File.read(file)) })
       end
     end
 

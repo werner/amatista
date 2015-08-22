@@ -84,6 +84,18 @@ describe Response do
 
       route.should be_nil
     end
+
+    it "process a path and returns nil" do
+      headers = HTTP::Headers.new
+      headers["Host"] = "host.domain.com"
+      headers["Body"] = ""
+
+      request  = HTTP::Request.new "GET", "/", headers
+      response = Response.new(request)
+      route    = response.process_static("/")
+
+      route.should be_nil
+    end
   end
 
   context "#process_params" do
