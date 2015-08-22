@@ -1,3 +1,5 @@
+require "mime"
+
 module Amatista
   # Helpers used by the methods in the controller class.
   module Helpers
@@ -17,12 +19,7 @@ module Amatista
     # Makes a respond based on context type
     # The body argument should be string if used html context type
     def respond_to(context, body)
-      context = case context
-                when :html then "text/html"
-                when :json then "text/json"
-                else
-                  raise "#{context} not available"
-                end
+      context = Mime.from_ext(context).to_s
       HTTP::Response.new(200, body, process_header(context))
     end
 

@@ -1,0 +1,3 @@
+deps do
+  github "spalger/crystal-mime"
+end

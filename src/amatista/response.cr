@@ -1,3 +1,5 @@
+require "mime"
+
 module Amatista
   # Use by the framework to return an appropiate response based on the request.
   class Response
@@ -11,15 +13,11 @@ module Amatista
     end
 
     def process_static(path)
-      content_type = ""
-      content_type = "application/javascript" if path.match(/\.js/)
-      content_type = "text/css" if path.match(/\.css/)
-      return if content_type.empty?
-
-      file = File.join($amatista.public_dir, path)
+      mime_type = Mime.from_ext(File.extname(path)[1..-1]).to_s
+      file      = File.join($amatista.public_dir, path)
       if File.exists?(file)
-        Route.new("GET", path,
-                   ->(x : Hash(String, Array(String))){ HTTP::Response.ok(content_type, File.read(file)) })
+        Route.new("GET", path, 
+                  ->(x : Hash(String, Array(String))) { HTTP::Response.ok(mime_type, File.read(file)) })
       end
     end
 
