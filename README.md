@@ -1,4 +1,4 @@
-# Amatista [![Build Status](https://travis-ci.org/werner/amatista.png)](https://travis-ci.org/werner/amatista)
+# Amatista [![Build Status](https://travis-ci.org/werner/amatista.png)](https://travis-ci.org/werner/amatista) [![docrystal.org](http://www.docrystal.org/badge.svg?style=round)](http://www.docrystal.org/github.com/werner/amatista)
 
 This is a web framework build in [Crystal](https://github.com/manastech/crystal) to create quick applications.
 
