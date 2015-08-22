@@ -12,7 +12,7 @@ module Amatista
 
     # Saves a session key.
     def set_session(key, value)
-      $amatista.cookie_hash = Base64.strict_encode64(Crypto::MD5.hex_digest($amatista.secret_key))
+      $amatista.cookie_hash = Base64.strict_encode(Crypto::MD5.hex_digest($amatista.secret_key))
       $amatista.sessions[$amatista.cookie_hash] = {key => value}
     end
 
@@ -21,17 +21,18 @@ module Amatista
       return unless request = $amatista.request
       cookie = request.headers["Cookie"]?.to_s
       session_hash = process_session(cookie)
-      $amatista.sessions[session_hash][key]?
+      $amatista.sessions[session_hash][key]? if session_hash
     end
 
-    def has_session
+    def has_session?
       return unless request = $amatista.request
       cookie = request.headers["Cookie"]?.to_s
       !cookie.split(";").select(&.match(/_amatista_session_id/)).empty?
     end
 
     private def process_session(string)
-      string.split(";").select(&.match(/_amatista_session_id/)).first.gsub(/_amatista_session_id=/,"").gsub(/\s/,"")
+      amatista_session = string.split(";").select(&.match(/_amatista_session_id/)).first?
+      amatista_session.gsub(/_amatista_session_id=/,"").gsub(/\s/,"") if amatista_session
     end
   end
 end

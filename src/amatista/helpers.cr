@@ -29,7 +29,7 @@ module Amatista
     private def process_header(context)
       header = HTTP::Headers.new
       header.add("Content-Type", context)
-      if !$amatista.sessions.empty? && !has_session
+      if !$amatista.sessions.empty? && !has_session?
         header.add("Set-Cookie", send_sessions_to_cookie)
       end
       header
