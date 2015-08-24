@@ -4,14 +4,14 @@ class LayoutView < BaseView
   def initialize(@container)
   end
 
-  set_ecr("layout")
+  set_ecr("layout", "app/views")
 end
 
 class DataTestView < BaseView
   def initialize(@tasks)
   end
 
-  set_ecr("test_data")
+  set_ecr("test_data", "app/views")
 end
 
 describe Controller do
@@ -24,10 +24,13 @@ describe Controller do
 
   it "gets a request based on a view" do
     app = Controller
-    
+
     app.get("/") do
       tasks = ["first task", "second task"]
       app.respond_to(:html, DataTestView.new(tasks).set_view) 
-    end.body.should eq("<html><body><h1>Hello World Test</h1><table> tasks: [\"first task\", \"second task\"]</table>\n</body></html>")
+    end.body.should(eq(
+      "<html><body><h1>Hello World Test</h1>" +
+      "<table> tasks: [\"first task\", \"second task\"]</table>\n</body></html>"
+    ))
   end
 end

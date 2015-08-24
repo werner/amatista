@@ -17,8 +17,10 @@ module Amatista
       LayoutView.new(self.to_s).to_s.strip
     end
 
-    macro set_ecr(view_name)
-      ecr_file "app/views/#{{{view_name}}}.ecr"
+    macro set_ecr(view_name, path = "src/views")
+      if File.directory?({{path}})
+        ecr_file "#{{{path}}}/#{{{view_name}}}.ecr"
+      end
     end
   end
 end
