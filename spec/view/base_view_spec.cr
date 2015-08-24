@@ -4,11 +4,11 @@ class LayoutView < BaseView
   def initialize(@container)
   end
 
-  set_ecr("layout", "app/views")
+  set_ecr("layout", "spec/app/views")
 end
 
 class TestView < BaseView
-  set_ecr("test", "app/views")
+  set_ecr("test", "spec/app/views")
 end
 
 describe BaseView do

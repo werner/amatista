@@ -4,14 +4,14 @@ class LayoutView < BaseView
   def initialize(@container)
   end
 
-  set_ecr("layout", "app/views")
+  set_ecr("layout", "spec/app/views")
 end
 
 class DataTestView < BaseView
   def initialize(@tasks)
   end
 
-  set_ecr("test_data", "app/views")
+  set_ecr("test_data", "spec/app/views")
 end
 
 describe Controller do
