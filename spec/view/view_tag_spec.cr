@@ -11,6 +11,15 @@ describe ViewTag do
       view.text_field(:post, :title).should eq("<input type=\"text\" id=\"post_title\" name=\"post[title]\" />")
     end
 
+    it "display an input password" do
+      view = BaseView.new
+
+      view.password_field(:post, :title, { size: 20, class: "test_class" }).should(
+        eq("<input type=\"password\" id=\"post_title\" name=\"post[title]\" size = \"20\" class = \"test_class\" />")
+      )
+      view.password_field(:post, :title).should eq("<input type=\"password\" id=\"post_title\" name=\"post[title]\" />")
+    end
+
     it "display a hidden field" do
       view = BaseView.new
 

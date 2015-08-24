@@ -1,6 +1,6 @@
 module Amatista
   class Model
-    # Executes a query against a database
+    # Executes a query against a database.
     # Example
     # ```crystal
     # class Task < Amatista::Model

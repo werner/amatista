@@ -12,6 +12,13 @@ module Amatista
       end
     end
 
+    def password_field(object_name, method, raw_options = [] of Hash(Symbol, String))
+      input_tag(raw_options) do |str_result|
+        str_result << "<input type=\"password\" id=\"#{HTML.escape(object_name.to_s)}_#{HTML.escape(method.to_s)}\" "
+        str_result << "name=\"#{HTML.escape(object_name.to_s)}[#{HTML.escape(method.to_s)}]\""
+      end
+    end
+
     def hidden_tag(object_name, method, value, raw_options = [] of Hash(Symbol, String))
       input_tag(raw_options) do |str_result|
         str_result << "<input type=\"hidden\" id=\"#{HTML.escape(object_name.to_s)}_#{HTML.escape(method.to_s)}\" "
