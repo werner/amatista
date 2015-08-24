@@ -10,7 +10,7 @@ deps do
 end
 ```
 
-### Usage
+### Basic Usage
 
 ```crystal
 require "amatista"
@@ -20,7 +20,24 @@ class HelloWorldController < Amatista::Controller
     html = %(<h1> Hello World </h1>)
     respond_to(:html, html)
   end
-  
+end
+
+class Main < Amatista::Base
+  configure do |conf|
+    conf[:secret_key] = "secret"
+  end
+end
+
+app = Main.new
+
+app.run 3000
+```
+
+### View System
+
+```crystal
+
+class HelloWorldController < Amatista::Controller
   get "/tasks" do
     tasks = Task.all
     # You're going to need a LayoutView class as 
@@ -51,17 +68,6 @@ class IndexView < Amatista::BaseView
 
   set_ecr "index"
 end
-
-class Main < Amatista::Base
-  configure do |conf|
-    conf[:secret_key] = "secret"
-  end
-end
-
-app = Main.new
-
-app.run 3000
-
 
 #Views: 
 #layout.ecr
