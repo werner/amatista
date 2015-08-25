@@ -1,12 +1,13 @@
 module Amatista
   # Use by the framework to handle the request params.
   class Route
+    property controller
     property method
     property path
     property block
     property request_path
 
-    def initialize(@method, @path, @block)
+    def initialize(@controller, @method, @path, @block)
       @params = {} of String => Array(String)
       @request_path = ""
     end

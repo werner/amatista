@@ -14,6 +14,11 @@ class DataTestView < BaseView
   set_ecr("test_data", "spec/app/views")
 end
 
+class TestController < Controller
+  before_filter { "testing" }
+  before_filter(["/tasks", "/users"]) { "testing with paths" }
+end
+
 describe Controller do
   it "gets a get request" do
     app = Controller
@@ -32,5 +37,9 @@ describe Controller do
       "<html><body><h1>Hello World Test</h1>" +
       "<table> tasks: [\"first task\", \"second task\"]</table>\n</body></html>"
     ))
+  end
+
+  it "sets a filter" do
+    subject = TestController
   end
 end

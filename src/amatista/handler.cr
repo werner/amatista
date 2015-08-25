@@ -7,6 +7,7 @@ module Amatista
   class Handler
     property params
     property routes
+    property filters
     property sessions
     property cookie_hash
     property secret_key
@@ -18,6 +19,7 @@ module Amatista
     def initialize
       @params              = {} of String => Array(String)
       @routes              = [] of Route
+      @filters             = [] of Filter
       @sessions            = {} of String => Hash(String, String)
       @cookie_hash         = ""
       @secret_key          = ""
