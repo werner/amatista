@@ -24,6 +24,16 @@ module Amatista
       $amatista.sessions[session_hash][key]? if session_hash
     end
 
+    # remove a sessions value from the cookie.
+    def remove_session(key)
+      return unless request = $amatista.request
+      cookie = request.headers["Cookie"]?.to_s
+      session_hash = process_session(cookie)
+      if session_hash && $amatista.sessions[session_hash][key]
+        $amatista.sessions[session_hash].delete(key)
+      end
+    end
+
     def has_session?
       return unless request = $amatista.request
       cookie = request.headers["Cookie"]?.to_s
