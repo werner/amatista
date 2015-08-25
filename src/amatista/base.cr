@@ -37,14 +37,18 @@ module Amatista
       begin
         response = Response.new(request)
 
-        route = response.process_static(request.path.to_s)
-        route = Response.find_route($amatista.routes, request.method, request.path.to_s) unless route
+        route = response.process_static(request.path.to_s) ||
+                Response.find_route($amatista.routes, request.method, request.path.to_s)
 
         return HTTP::Response.not_found unless route
+        return route if route.is_a? HTTP::Response
 
         $amatista.params  = response.process_params(route)
         $amatista.request = request
 
+        filters = Filter.find($amatista.filters, route.controller, route.path)
+
+        filters.each(&.block.call()) unless filters.empty?
         route.block.call($amatista.params)
       rescue e
         HTTP::Response.error "text/plain", "Error: #{e}"

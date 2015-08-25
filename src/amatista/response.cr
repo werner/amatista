@@ -16,8 +16,7 @@ module Amatista
       mime_type = Mime.from_ext(File.extname(path).gsub(".", ""))
       file      = File.join($amatista.public_dir, path)
       if File.exists?(file) && mime_type
-        Route.new("GET", path, 
-                  ->(x : Hash(String, Array(String))) { HTTP::Response.ok(mime_type.to_s, File.read(file)) })
+        HTTP::Response.ok(mime_type.to_s, File.read(file))
       end
     end
 

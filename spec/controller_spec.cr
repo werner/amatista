@@ -15,31 +15,58 @@ class DataTestView < BaseView
 end
 
 class TestController < Controller
-  before_filter { "testing" }
-  before_filter(["/tasks", "/users"]) { "testing with paths" }
+  before_filter { set_session("test_filter", "testing a filter")  }
+  before_filter(["/tasks", "/users"]) { 
+    set_session("test_filter_with_paths", "testing a filter with paths") 
+  }
 end
 
 describe Controller do
   it "gets a get request" do
-    app = Controller
+    subject = TestController
     
     html_result = "<html><body>Hello World</body></html>"
-    app.get("/") { app.respond_to(:html, html_result) }.body.should eq("<html><body>Hello World</body></html>")
+    subject.get("/") { subject.respond_to(:html, html_result) }.body.should eq("<html><body>Hello World</body></html>")
   end
 
   it "gets a request based on a view" do
-    app = Controller
+    subject = TestController
 
-    app.get("/") do
+    subject.get("/") do
       tasks = ["first task", "second task"]
-      app.respond_to(:html, DataTestView.new(tasks).set_view) 
+      subject.respond_to(:html, DataTestView.new(tasks).set_view) 
     end.body.should(eq(
       "<html><body><h1>Hello World Test</h1>" +
       "<table> tasks: [\"first task\", \"second task\"]</table>\n</body></html>"
     ))
   end
 
-  it "sets a filter" do
-    subject = TestController
+  context "filters" do
+    it "sets a global filter" do
+      headers = HTTP::Headers.new
+      headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
+
+      $amatista.request = HTTP::Request.new "GET", "/", headers
+      $amatista.secret_key = "secret"
+
+      subject = TestController
+      subject.get("/") { subject.respond_to(:text, "Hello World") }
+      Base.new.process(HTTP::Request.new("GET", "/", headers))
+      subject.get_session("test_filter").should eq("testing a filter")
+      subject.get_session("test_filter_with_paths").should eq(nil)
+    end
+
+    it "sets a filter for certain paths" do
+      headers = HTTP::Headers.new
+      headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
+
+      $amatista.request = HTTP::Request.new "GET", "/tasks", headers
+      $amatista.secret_key = "secret"
+
+      subject = TestController
+      subject.get("/tasks") { subject.respond_to(:text, "Hello Tasks") }
+      Base.new.process(HTTP::Request.new("GET", "/tasks", headers))
+      subject.get_session("test_filter_with_paths").should eq("testing a filter with paths")
+    end
   end
 end
