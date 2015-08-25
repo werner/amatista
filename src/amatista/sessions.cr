@@ -21,6 +21,7 @@ module Amatista
       return unless request = $amatista.request
       cookie = request.headers["Cookie"]?.to_s
       session_hash = process_session(cookie)
+      return nil unless $amatista.sessions[session_hash]?
       $amatista.sessions[session_hash][key]? if session_hash
     end
 
@@ -29,9 +30,8 @@ module Amatista
       return unless request = $amatista.request
       cookie = request.headers["Cookie"]?.to_s
       session_hash = process_session(cookie)
-      if session_hash && $amatista.sessions[session_hash][key]
-        $amatista.sessions[session_hash].delete(key)
-      end
+      return nil unless $amatista.sessions[session_hash]?
+      $amatista.sessions[session_hash].delete(key)
     end
 
     def has_session?
