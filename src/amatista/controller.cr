@@ -24,5 +24,9 @@ module Amatista
       end
     end
 
+    def self.superclass
+      self
+    end
+
   end
 end
