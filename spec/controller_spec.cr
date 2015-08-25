@@ -14,11 +14,14 @@ class DataTestView < BaseView
   set_ecr("test_data", "spec/app/views")
 end
 
-class TestController < Controller
+class ApplicationController < Controller
   before_filter { set_session("test_filter", "testing a filter")  }
   before_filter(["/tasks", "/users"]) { 
     set_session("test_filter_with_paths", "testing a filter with paths") 
   }
+end
+
+class TestController < ApplicationController
 end
 
 describe Controller do

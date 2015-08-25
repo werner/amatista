@@ -18,6 +18,10 @@ module Amatista
       def self.before_filter(paths = [] of String, &block)
         $amatista.filters << Amatista::Filter.new({{@type}}, paths, block)
       end
+
+      def self.superclass
+        {{@type.superclass}}
+      end
     end
 
   end
