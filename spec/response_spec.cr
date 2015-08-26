@@ -1,11 +1,14 @@
+require "webmock"
 require "./spec_helper"
 
 describe Response do
   context ".find_route" do
     it "find path /tasks/new from a group of routes" do
-      routes = [Route.new(nil, "GET", "/tasks/new", ->(x : Hash(String, Array(String))){})]
+      WebMock.stub(:any, "test")
+      response = HTTP::Client.get("http://test")
+      routes = [Route.new(nil, "GET", "/tasks/new", ->(x : Hash(String, Array(String))){ response })]
       50.times do |n|
-        routes <<  Route.new(nil, "GET", "/tasks/#{n}", ->(x : Hash(String, Array(String))){})
+        routes <<  Route.new(nil, "GET", "/tasks/#{n}", ->(x : Hash(String, Array(String))){ response })
       end
 
       route = Response.find_route(routes, "GET", "/tasks/new")
@@ -14,9 +17,11 @@ describe Response do
     end
 
     it "does not find path" do
-      routes = [Route.new(nil, "GET", "/tasks/new", ->(x : Hash(String, Array(String))){})]
+      WebMock.stub(:any, "test")
+      response = HTTP::Client.get("http://test")
+      routes = [Route.new(nil, "GET", "/tasks/new", ->(x : Hash(String, Array(String))){ response })]
       50.times do |n|
-        routes <<  Route.new(nil, "GET", "/tasks/#{n}", ->(x : Hash(String, Array(String))){})
+        routes <<  Route.new(nil, "GET", "/tasks/#{n}", ->(x : Hash(String, Array(String))){ response })
       end
 
       route = Response.find_route(routes, "GET", "/tasks/edit")
@@ -25,9 +30,11 @@ describe Response do
     end
 
     it "find the GET method route" do
-      routes = [Route.new(nil, "GET", "/tasks", ->(x : Hash(String, Array(String))){}), 
-                Route.new(nil, "PUT", "/tasks", ->(x : Hash(String, Array(String))){}),
-                Route.new(nil, "POST", "/tasks", ->(x : Hash(String, Array(String))){})]
+      WebMock.stub(:any, "test")
+      response = HTTP::Client.get("http://test")
+      routes = [Route.new(nil, "GET", "/tasks", ->(x : Hash(String, Array(String))){ response }), 
+                Route.new(nil, "PUT", "/tasks", ->(x : Hash(String, Array(String))){ response }),
+                Route.new(nil, "POST", "/tasks", ->(x : Hash(String, Array(String))){ response })]
 
 
       route = Response.find_route(routes, "GET", "/tasks")
@@ -39,9 +46,11 @@ describe Response do
     end
 
     it "find the POST method route" do
-      routes = [Route.new(nil, "GET", "/tasks", ->(x : Hash(String, Array(String))){}), 
-                Route.new(nil, "POST", "/tasks", ->(x : Hash(String, Array(String))){}),
-                Route.new(nil, "DELETE", "/tasks", ->(x : Hash(String, Array(String))){})]
+      WebMock.stub(:any, "test")
+      response = HTTP::Client.get("http://test")
+      routes = [Route.new(nil, "GET", "/tasks", ->(x : Hash(String, Array(String))){ response }), 
+                Route.new(nil, "POST", "/tasks", ->(x : Hash(String, Array(String))){ response }),
+                Route.new(nil, "DELETE", "/tasks", ->(x : Hash(String, Array(String))){ response })]
 
       route = Response.find_route(routes, "POST", "/tasks")
 
@@ -98,6 +107,8 @@ describe Response do
   end
 
   context "#process_params" do
+      WebMock.stub(:any, "test")
+      http_response = HTTP::Client.get("http://test")
       headers = HTTP::Headers.new
       headers["Host"] = "host.domain.com"
       headers["Body"] = ""
@@ -106,7 +117,7 @@ describe Response do
       response = Response.new(request)
       route    = Route.new(nil, "GET", 
                            "/tasks/edit/:id/soon/:other_task", 
-                           ->(x : Hash(String, Array(String))){})
+                           ->(x : Hash(String, Array(String))){ http_response })
       route.request_path = "/tasks/edit/2/soon/34"
 
       response.process_params(route).should eq({"" => [""], "id" => ["2"], "other_task" => ["34"]})

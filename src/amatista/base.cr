@@ -33,7 +33,7 @@ module Amatista
     end
 
     # Returns a response based on the request client.
-    def process(request)
+    def process(request) : HTTP::Response
       begin
         response = Response.new(request)
 
