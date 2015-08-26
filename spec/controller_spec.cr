@@ -76,7 +76,7 @@ describe Controller do
       subject.get_session("test_filter_with_paths").should eq("testing a filter with paths")
     end
 
-    it "redirects from the filter" do
+    pending "redirects from the filter" do
       headers = HTTP::Headers.new
       headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
 
