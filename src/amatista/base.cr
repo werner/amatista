@@ -48,7 +48,7 @@ module Amatista
 
         filters = Filter.find($amatista.filters, route.controller, route.path)
 
-        filters.each(&.block.call()) unless filters.empty?
+        filters.each(&.block.call())
         route.block.call($amatista.params)
       rescue e
         HTTP::Response.error "text/plain", "Error: #{e}"
