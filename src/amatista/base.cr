@@ -27,13 +27,13 @@ module Amatista
     def run(port)
       server = HTTP::Server.new port, do |request|
         p request
-        process(request)
+        process_request(request)
       end
       server.listen
     end
 
     # Returns a response based on the request client.
-    def process(request : HTTP::Request) : HTTP::Response
+    def process_request(request : HTTP::Request) : HTTP::Response
       begin
         response = Response.new(request)
 

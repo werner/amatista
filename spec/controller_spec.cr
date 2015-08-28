@@ -55,7 +55,7 @@ describe Controller do
       $amatista.secret_key = "secret"
 
       subject.get("/") { subject.respond_to(:text, "Hello World") }
-      Base.new.process(HTTP::Request.new("GET", "/", headers))
+      Base.new.process_request(HTTP::Request.new("GET", "/", headers))
       subject.get_session("test_filter").should eq("testing a filter")
       subject.get_session("test_filter_with_paths").should eq(nil)
     end
@@ -68,7 +68,7 @@ describe Controller do
       $amatista.secret_key = "secret"
 
       subject.get("/tasks") { subject.respond_to(:text, "Hello Tasks") }
-      Base.new.process(HTTP::Request.new("GET", "/tasks", headers))
+      Base.new.process_request(HTTP::Request.new("GET", "/tasks", headers))
       subject.get_session("test_filter_with_paths").should eq("testing a filter with paths")
     end
 
@@ -82,7 +82,7 @@ describe Controller do
       subject = FinishController
       subject.get("/filter_tests") { subject.respond_to(:text, "Hello Home") }
       subject.get("/filter_tasks") { subject.respond_to(:text, "Hello Tasks") }
-      Base.new.process(HTTP::Request.new("GET", "/filter_tests", headers)).body.should(
+      Base.new.process_request(HTTP::Request.new("GET", "/filter_tests", headers)).body.should(
         eq("Hello Tasks")
       )
     end

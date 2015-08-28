@@ -12,7 +12,7 @@ describe Base do
 
       request = HTTP::Request.new "GET", "/", headers
 
-      response = app.process(request)
+      response = app.process_request(request)
 
       response.class.should eq(HTTP::Response)
     end
