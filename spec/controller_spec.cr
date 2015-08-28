@@ -54,7 +54,6 @@ describe Controller do
       $amatista.request = HTTP::Request.new "GET", "/", headers
       $amatista.secret_key = "secret"
 
-      subject = TestController
       subject.get("/") { subject.respond_to(:text, "Hello World") }
       Base.new.process(HTTP::Request.new("GET", "/", headers))
       subject.get_session("test_filter").should eq("testing a filter")
@@ -68,7 +67,6 @@ describe Controller do
       $amatista.request = HTTP::Request.new "GET", "/tasks", headers
       $amatista.secret_key = "secret"
 
-      subject = TestController
       subject.get("/tasks") { subject.respond_to(:text, "Hello Tasks") }
       Base.new.process(HTTP::Request.new("GET", "/tasks", headers))
       subject.get_session("test_filter_with_paths").should eq("testing a filter with paths")
