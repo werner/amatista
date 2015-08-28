@@ -26,6 +26,9 @@ end
 
 class FinishController < Controller
   before_filter { redirect_to("/filter_tasks")  }
+
+  get("/filter_tests") { respond_to(:text, "Hello Home") }
+  get("/filter_tasks") { respond_to(:text, "Hello Tasks") }
 end
 
 describe Controller do
@@ -72,18 +75,15 @@ describe Controller do
       subject.get_session("test_filter_with_paths").should eq("testing a filter with paths")
     end
 
-    pending "redirects from the filter" do
+    it "redirects from the filter" do
       headers = HTTP::Headers.new
       headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
 
       $amatista.request = HTTP::Request.new "GET", "/tasks", headers
       $amatista.secret_key = "secret"
 
-      subject = FinishController
-      subject.get("/filter_tests") { subject.respond_to(:text, "Hello Home") }
-      subject.get("/filter_tasks") { subject.respond_to(:text, "Hello Tasks") }
       Base.new.process_request(HTTP::Request.new("GET", "/filter_tests", headers)).body.should(
-        eq("Hello Tasks")
+        eq("redirection")
       )
     end
   end

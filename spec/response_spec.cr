@@ -56,51 +56,6 @@ describe Response do
     end
   end
 
-  context "#process_static" do
-    it "process a js file" do
-      headers = HTTP::Headers.new
-      headers["Host"] = "host.domain.com"
-      headers["Body"] = ""
-
-      request = HTTP::Request.new "GET", "/", headers
-
-      response = Response.new(request)
-
-      filename = "jquery.js"
-      File.open("jquery.js", "w") { |f| f.puts "jquery" }
-
-      content = response.process_static("jquery.js")
-
-      content.body.should eq("jquery\n") if content
-
-      File.delete(filename)
-    end
-
-    it "does not process file" do
-      headers = HTTP::Headers.new
-      headers["Host"] = "host.domain.com"
-      headers["Body"] = ""
-
-      request  = HTTP::Request.new "GET", "/", headers
-      response = Response.new(request)
-      route    = response.process_static("jquery.js")
-
-      route.should be_nil
-    end
-
-    it "process a path and returns nil" do
-      headers = HTTP::Headers.new
-      headers["Host"] = "host.domain.com"
-      headers["Body"] = ""
-
-      request  = HTTP::Request.new "GET", "/", headers
-      response = Response.new(request)
-      route    = response.process_static("/")
-
-      route.should be_nil
-    end
-  end
-
   context "#process_params" do
       headers = HTTP::Headers.new
       headers["Host"] = "host.domain.com"

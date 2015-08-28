@@ -12,14 +12,6 @@ module Amatista
       routes.find {|route_request| route_request.method == method && route_request.match_path?(path_to_find) }
     end
 
-    def process_static(path)
-      mime_type = Mime.from_ext(File.extname(path).gsub(".", ""))
-      file      = File.join($amatista.public_dir, path)
-      if File.exists?(file) && mime_type
-        HTTP::Response.ok(mime_type.to_s, File.read(file))
-      end
-    end
-
     def process_params(route)
       route.request_path = @request.path.to_s
       route.add_params(CGI.parse(@request.body.to_s))
