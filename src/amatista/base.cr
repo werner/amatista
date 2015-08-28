@@ -23,7 +23,7 @@ module Amatista
       $amatista.public_dir          = configuration[:public_dir]? || $amatista.public_dir
     end
 
-    # Run the server, just needs a port number
+    # Run the server, just needs a port number.
     def run(port)
       server = HTTP::Server.new port, do |request|
         p request
@@ -33,7 +33,7 @@ module Amatista
     end
 
     # Returns a response based on the request client.
-    def process(request : HTTP::Request ) : HTTP::Response
+    def process(request : HTTP::Request) : HTTP::Response
       begin
         response = Response.new(request)
 
@@ -48,7 +48,7 @@ module Amatista
 
         filters = Filter.find($amatista.filters, route.controller, route.path)
 
-        filters.each(&.block.call())
+        filters.each(&.block.call($amatista.params))
         route.block.call($amatista.params)
       rescue e
         HTTP::Response.error "text/plain", "Error: #{e}"
