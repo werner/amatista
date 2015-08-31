@@ -3,8 +3,9 @@ module Amatista
     property block
     property paths
     property controller
+    property condition
 
-    def initialize(@controller, @paths, @block)
+    def initialize(@controller, @paths, @condition, @block)
     end
 
     # Finds the filters based on the controller or the ApplicationController father

@@ -15,8 +15,8 @@ module Amatista
         end
       {% end %}
 
-      def self.before_filter(paths = [] of String, &block : -> T)
-        $amatista.filters << Amatista::Filter.new({{@type}}, paths, block)
+      def self.before_filter(paths = [] of String, condition = true, &block : -> T)
+        $amatista.filters << Amatista::Filter.new({{@type}}, paths, condition, block)
       end
 
       def self.superclass

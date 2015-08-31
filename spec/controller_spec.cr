@@ -25,7 +25,7 @@ class TestController < ApplicationController
 end
 
 class FinishController < Controller
-  before_filter { redirect_to("/filter_tasks")  }
+  before_filter(condition: (1 == 1)) { redirect_to("/filter_tasks")  }
 
   get("/filter_tests") { respond_to(:text, "Hello Home") }
   get("/filter_tasks") { respond_to(:text, "Hello Tasks") }
