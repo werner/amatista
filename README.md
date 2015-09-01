@@ -7,6 +7,7 @@ This is a web framework build in [Crystal](https://github.com/manastech/crystal)
 ```crystal
 deps do
   github "werner/amatista"
+  github "spalger/crystal-mime"
 end
 ```
 
