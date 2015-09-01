@@ -10,7 +10,7 @@ module Amatista
     #   configure do |conf|
     #     conf[:secret_key]          = "secret"
     #     conf[:database_driver]     = "postgres"
-    #     conf[:database_connection] = ENV["DATABASE_URL"] 
+    #     conf[:database_connection] = ENV["DATABASE_URL"]
     #   end
     # end
     # ```
@@ -21,12 +21,13 @@ module Amatista
       $amatista.database_connection = configuration[:database_connection]? || ""
       $amatista.database_driver     = configuration[:database_driver]? || ""
       $amatista.public_dir          = configuration[:public_dir]? || $amatista.public_dir
+      $amatista.logs                = configuration[:logs]? || false
     end
 
     # Run the server, just needs a port number.
     def run(port)
       server = HTTP::Server.new port, do |request|
-        p request
+        p request if $amatista.logs
         static_response = process_static(request.path.to_s)
         return static_response if static_response.is_a? HTTP::Response
         process_request(request)
@@ -70,7 +71,7 @@ module Amatista
       filters.each do |filter|
         block = filter.block
         if block.is_a?(-> HTTP::Response) && filter.condition
-          response_block = block 
+          response_block = block
         else
           block.call()
         end
