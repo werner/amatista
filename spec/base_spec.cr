@@ -1,31 +1,35 @@
 require "./spec_helper"
 
+class TestProcessController < Controller
+  get("tests") { respond_to(:text, "Hello Tests") }
+end
+
 describe Base do
+  app = Base.new
+  headers = HTTP::Headers.new
+  headers["Host"] = "host.domain.com"
+  headers["Body"] = ""
 
   context "#process_request" do
     it "receive an http request" do
-      app = Base.new
-
-      headers = HTTP::Headers.new
-      headers["Host"] = "host.domain.com"
-      headers["Body"] = ""
-
       request = HTTP::Request.new "GET", "/", headers
 
       response = app.process_request(request)
 
       response.class.should eq(HTTP::Response)
     end
+
+    it "process a route with no slashes" do
+      request = HTTP::Request.new "GET", "/tests", headers
+
+      response = app.process_request(request)
+
+      response.status_code.should eq(200)
+    end
   end
 
   context "#process_static" do
     it "process a js file" do
-      app = Base.new
-
-      headers = HTTP::Headers.new
-      headers["Host"] = "host.domain.com"
-      headers["Body"] = ""
-
       request = HTTP::Request.new "GET", "/", headers
 
       filename = "jquery.js"
@@ -39,12 +43,6 @@ describe Base do
     end
 
     it "does not process file" do
-      app = Base.new
-
-      headers = HTTP::Headers.new
-      headers["Host"] = "host.domain.com"
-      headers["Body"] = ""
-
       request  = HTTP::Request.new "GET", "/", headers
       route    = app.process_static("jquery.js")
 
@@ -52,12 +50,6 @@ describe Base do
     end
 
     it "process a path and returns nil" do
-      app = Base.new
-
-      headers = HTTP::Headers.new
-      headers["Host"] = "host.domain.com"
-      headers["Body"] = ""
-
       request  = HTTP::Request.new "GET", "/", headers
       route    = app.process_static("/")
 

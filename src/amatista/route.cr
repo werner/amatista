@@ -27,8 +27,8 @@ module Amatista
     def match_path?(path)
       return path == "/" if @path == "/"
 
-      original_path = @path.split("/")
-      path_to_match = path.split("/")
+      original_path = @path.split("/") - [""]
+      path_to_match = path.split("/") - [""]
 
       original_path.length == path_to_match.length &&
         original_path.zip(path_to_match).all? do |item|

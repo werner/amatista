@@ -36,7 +36,9 @@ describe Controller do
     
   it "gets a get request" do
     html_result = "<html><body>Hello World</body></html>"
-    subject.get("/") { subject.respond_to(:html, html_result) }.body.should eq("<html><body>Hello World</body></html>")
+    subject.get("/") { subject.respond_to(:html, html_result) }.body.should(
+      eq("<html><body>Hello World</body></html>")
+    )
   end
 
   it "gets a request based on a view" do
