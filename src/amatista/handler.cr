@@ -28,6 +28,7 @@ module Amatista
       @database_connection = ""
       @database_driver     = ""
       @public_dir          = Dir.working_directory
+      @logs                = false
     end
   end
 end

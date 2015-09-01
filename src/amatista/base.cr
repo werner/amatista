@@ -21,7 +21,7 @@ module Amatista
       $amatista.database_connection = configuration[:database_connection]? || ""
       $amatista.database_driver     = configuration[:database_driver]? || ""
       $amatista.public_dir          = configuration[:public_dir]? || $amatista.public_dir
-      $amatista.logs                = configuration[:logs]? || ""
+      $amatista.logs                = configuration[:logs]? || false
     end
 
     # Run the server, just needs a port number.
