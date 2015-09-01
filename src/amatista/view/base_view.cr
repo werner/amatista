@@ -1,6 +1,7 @@
 require "ecr"
 require "ecr/macros"
 require "./view_tag"
+require "../sessions"
 
 module Amatista
   # Set of methods to reduce the steps to display a view
@@ -8,6 +9,7 @@ module Amatista
   # The views should be placed in app/views folder.
   class BaseView
     include ViewTag
+    include Sessions
 
     def initialize(@arguments = nil)
     end
