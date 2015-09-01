@@ -3,7 +3,7 @@ require "http/server"
 require "./route"
 
 module Amatista
-  # Use to saves configuration, routes and other data needed for the application. 
+  # Use to saves configuration, routes and other data needed for the application.
   class Handler
     property params
     property routes
@@ -15,6 +15,7 @@ module Amatista
     property database_connection
     property database_driver
     property public_dir
+    property logs
 
     def initialize
       @params              = {} of String => Array(String)
