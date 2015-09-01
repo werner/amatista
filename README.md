@@ -40,7 +40,7 @@ app.run 3000
 class ApplicationController < Amatista::Controller
   #It will be a redirection if the condition is fulfilled,
   #it should not be a session with a key user_id for the redirect to works
-  before_filter(condition: !get_session("user_id")) do
+  before_filter(condition: -> { !get_session("user_id") }) do
     redirect_to("/sessions/new")
   end
 end

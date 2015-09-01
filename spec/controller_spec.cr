@@ -25,7 +25,7 @@ class TestController < ApplicationController
 end
 
 class FinishController < Controller
-  before_filter(condition: (1 == 1)) { redirect_to("/filter_tasks")  }
+  before_filter(condition: -> { !get_session("condition") }) { redirect_to("/filter_tasks")  }
 
   get("/filter_tests") { respond_to(:text, "Hello Home") }
   get("/filter_tasks") { respond_to(:text, "Hello Tasks") }
@@ -86,6 +86,19 @@ describe Controller do
 
       Base.new.process_request(HTTP::Request.new("GET", "/filter_tests", headers)).body.should(
         eq("redirection")
+      )
+    end
+
+    it "does not redirects from the filter" do
+      headers = HTTP::Headers.new
+      headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
+
+      $amatista.request = HTTP::Request.new "GET", "/tasks", headers
+      $amatista.secret_key = "secret"
+
+      subject.set_session("condition", "true")
+      Base.new.process_request(HTTP::Request.new("GET", "/filter_tests", headers)).body.should(
+        eq("Hello Home")
       )
     end
   end

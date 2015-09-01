@@ -70,7 +70,7 @@ module Amatista
       response_block = nil
       filters.each do |filter|
         block = filter.block
-        if block.is_a?(-> HTTP::Response) && filter.condition
+        if block.is_a?(-> HTTP::Response) && filter.condition.call()
           response_block = block
         else
           block.call()
