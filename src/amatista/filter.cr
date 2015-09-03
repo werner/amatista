@@ -1,4 +1,5 @@
 module Amatista
+  #Callback filters to use before the actions.
   class Filter
     property block
     property paths

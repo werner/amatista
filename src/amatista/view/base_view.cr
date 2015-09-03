@@ -2,6 +2,7 @@ require "ecr"
 require "ecr/macros"
 require "./view_tag"
 require "../sessions"
+require "../flash"
 
 module Amatista
   # Set of methods to reduce the steps to display a view
@@ -10,6 +11,7 @@ module Amatista
   class BaseView
     include ViewTag
     include Sessions
+    include Flash
 
     def initialize(@arguments = nil)
     end

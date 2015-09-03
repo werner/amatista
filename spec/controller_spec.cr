@@ -14,6 +14,13 @@ class DataTestView < BaseView
   set_ecr("test_data", "spec/app/views")
 end
 
+class FlashView < BaseView
+  def initialize()
+  end
+
+  set_ecr("flash", "spec/app/views")
+end
+
 class ApplicationController < Controller
   before_filter { set_session("test_filter", "testing a filter")  }
   before_filter(["/tasks", "/users"]) { 
@@ -100,6 +107,21 @@ describe Controller do
       Base.new.process_request(HTTP::Request.new("GET", "/filter_tests", headers)).body.should(
         eq("Hello Home")
       )
+    end
+  end
+
+  context "flash" do
+    it "shows the flash message" do
+      subject.get("/with_flash_message") do
+        subject.set_flash(:message, "hello message")
+        subject.respond_to(:html, FlashView.new.set_view)
+      end.body.should(eq("<html><body>hello message\n</body></html>"))
+    end
+
+    it "does not show the flash message" do
+      subject.get("/without_flash_message") do
+        subject.respond_to(:html, FlashView.new.set_view)
+      end.body.should(eq("<html><body>\n</body></html>"))
     end
   end
 end

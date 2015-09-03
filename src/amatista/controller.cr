@@ -1,3 +1,4 @@
+require "./flash"
 require "./helpers"
 require "./sessions"
 
@@ -5,6 +6,7 @@ module Amatista
   class Controller
     extend Helpers
     extend Sessions
+    extend Flash
 
     macro inherited
       # Creates 5 methods to handle the http requests from the browser.
