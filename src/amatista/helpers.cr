@@ -18,7 +18,7 @@ module Amatista
     # The body argument should be string if used html context type
     def respond_to(context, body)
       context = Mime.from_ext(context).to_s
-      HTTP::Response.new(200, body, add_headers({context: context}))
+      HTTP::Response.new 200, body, add_headers({context: context})
     end
 
     def add_headers(headers = {} of Symbol => String)
