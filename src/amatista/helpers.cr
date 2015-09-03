@@ -1,9 +1,9 @@
+require "http/server"
 require "mime"
 
 module Amatista
   # Helpers used by the methods in the controller class.
   module Helpers
-
     # Redirects to an url
     #
     # Example
@@ -11,32 +11,44 @@ module Amatista
     # redirect_to "/tasks"
     # ```
     def redirect_to(path)
-      HTTP::Response.new 303, "redirection", add_headers({location: path})
+      add_headers({location: path})
+      HTTP::Response.new 303, "redirection", set_headers
     end
 
     # Makes a respond based on context type
     # The body argument should be string if used html context type
     def respond_to(context, body)
       context = Mime.from_ext(context).to_s
-      HTTP::Response.new 200, body, add_headers({context: context})
+      add_headers({context: context})
+      HTTP::Response.new 200, body, set_headers
     end
 
     def add_headers(headers = {} of Symbol => String)
-      header = HTTP::Headers.new
-      headers.map do |type, value|
-        case type
-        when :context
-          header.add("Content-Type", value)
-        when :location
-          header.add("Location", value)
-        when :cache
-          header.add("Cache-Control", value)
+      @@header = HTTP::Headers.new unless @@header
+    
+      header = @@header
+      if header
+        headers.map do |type, value|
+          case type
+          when :context
+            header.add("Content-Type", value)
+          when :location
+            header.add("Location", value)
+          when :cache
+            header.add("Cache-Control", value)
+          end
+        end
+        if !$amatista.sessions.empty? && !has_session?
+          header.add("Set-Cookie", send_sessions_to_cookie)
         end
       end
-      if !$amatista.sessions.empty? && !has_session?
-        header.add("Set-Cookie", send_sessions_to_cookie)
-      end
-      header
+      @@header = header
+    end
+
+    def set_headers
+      headers = @@header
+      @@header = HTTP::Headers.new
+      headers || HTTP::Headers.new
     end
 
     # Find out the IP address
