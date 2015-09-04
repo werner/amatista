@@ -59,10 +59,11 @@ describe Controller do
   end
 
   context "filters" do
-    it "sets a global filter" do
-      headers = HTTP::Headers.new
-      headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
+    subject.send_sessions_to_cookie
 
+    headers = HTTP::Headers.new
+    headers["Cookie"] = "_amatista_session_id=#{$amatista.cookie_hash};"
+    it "sets a global filter" do
       $amatista.request = HTTP::Request.new "GET", "/", headers
       $amatista.secret_key = "secret"
 
@@ -73,9 +74,6 @@ describe Controller do
     end
 
     it "sets a filter for certain paths" do
-      headers = HTTP::Headers.new
-      headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
-
       $amatista.request = HTTP::Request.new "GET", "/tasks", headers
       $amatista.secret_key = "secret"
 
@@ -85,9 +83,6 @@ describe Controller do
     end
 
     it "redirects from the filter" do
-      headers = HTTP::Headers.new
-      headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
-
       $amatista.request = HTTP::Request.new "GET", "/tasks", headers
       $amatista.secret_key = "secret"
 
@@ -97,9 +92,6 @@ describe Controller do
     end
 
     it "does not redirects from the filter" do
-      headers = HTTP::Headers.new
-      headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
-
       $amatista.request = HTTP::Request.new "GET", "/tasks", headers
       $amatista.secret_key = "secret"
 

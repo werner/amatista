@@ -38,9 +38,8 @@ module Amatista
             header.add("Cache-Control", value)
           end
         end
-        if !$amatista.sessions.empty? && !has_session?
-          header.add("Set-Cookie", send_sessions_to_cookie)
-        end
+        
+        header.add("Set-Cookie", send_sessions_to_cookie) unless has_session?
       end
       @@header = header
     end

@@ -1,15 +1,18 @@
 require "./spec_helper"
 
 describe Sessions do
+  app = Controller
+  app.send_sessions_to_cookie
+
+  $amatista.secret_key = "secret"
+  headers = HTTP::Headers.new
+  headers["Cookie"] = "_amatista_session_id=#{$amatista.cookie_hash};"
+  $amatista.request = HTTP::Request.new "GET", "/", headers
+
   context "#set_session" do
     it "creates a session variable" do
-      app = Controller
-
-      $amatista.secret_key = "secret"
-
       app.set_session("test", "testing a session variable")
-      $amatista.cookie_hash.should eq "NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk="
-      $amatista.sessions["NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk="].should(
+      $amatista.sessions[$amatista.cookie_hash].should(
         eq({"test" => "testing a session variable"})
       )
     end
@@ -17,14 +20,6 @@ describe Sessions do
 
   context "#get_session" do
     it "returns a session variable" do
-      headers = HTTP::Headers.new
-      headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
-
-      app = Controller
-
-      $amatista.request = HTTP::Request.new "GET", "/", headers
-      $amatista.secret_key = "secret"
-
       app.set_session("test", "testing a session variable")
       app.get_session("test").should eq("testing a session variable")
     end
@@ -32,14 +27,6 @@ describe Sessions do
 
   context "#remove_session" do
     it "removes a session variable" do
-      headers = HTTP::Headers.new
-      headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
-
-      app = Controller
-
-      $amatista.request = HTTP::Request.new "GET", "/", headers
-      $amatista.secret_key = "secret"
-
       app.set_session("test", "testing a session variable")
       app.get_session("test").should eq("testing a session variable")
       app.remove_session("test")
@@ -49,12 +36,6 @@ describe Sessions do
 
   context "#has_session?" do
     it "returns true if session variable exists" do
-      headers = HTTP::Headers.new
-      headers["Cookie"] = "_amatista_session_id=NWViZTIyOTRlY2QwZTBmMDhlYWI3NjkwZDJhNmVlNjk=;"
-
-      app = Controller
-
-      $amatista.request = HTTP::Request.new "GET", "/", headers
       app.has_session?.should eq(true)
     end
   end
