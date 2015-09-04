@@ -1,7 +1,6 @@
 module Amatista
   # This class is used as a base for running amatista apps.
   class Base
-
     # Saves the configure options in a global variable
     #
     # Example:
@@ -15,19 +14,20 @@ module Amatista
     # end
     # ```
     def self.configure
-      configuration = {} of Symbol => String
+      configuration = {} of Symbol => (String | Bool)
       yield(configuration)
-      $amatista.secret_key          = configuration[:secret_key]? || ""
-      $amatista.database_connection = configuration[:database_connection]? || ""
-      $amatista.database_driver     = configuration[:database_driver]? || ""
-      $amatista.public_dir          = configuration[:public_dir]? || $amatista.public_dir
-      $amatista.logs                = configuration[:logs]? || false
+      $amatista.secret_key          = configuration[:secret_key]?.to_s
+      $amatista.database_connection = configuration[:database_connection]?.to_s
+      $amatista.database_driver     = configuration[:database_driver]?.to_s
+      public_dir                    = configuration[:public_dir]?.to_s
+      $amatista.public_dir          = public_dir unless public_dir.empty?
+      @@logs                        = configuration[:logs]? || false
     end
 
     # Run the server, just needs a port number.
     def run(port)
       server = HTTP::Server.new port, do |request|
-        p request if $amatista.logs
+        p request if @@logs
         static_response = process_static(request.path.to_s)
         return static_response if static_response.is_a? HTTP::Response
         process_request(request)
