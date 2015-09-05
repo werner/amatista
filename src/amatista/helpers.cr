@@ -40,22 +40,17 @@ module Amatista
 
     private def add_headers(headers = {} of Symbol => String)
       @@header = HTTP::Headers.new unless @@header
+
+      header_label = {context:       "Content-Type",
+                      location:      "Location",
+                      cache:         "Cache-Control",
+                      last_modified: "Last-Modified"}
     
       header = @@header
       if header
         headers.map do |type, value|
-          case type
-          when :context
-            header.add("Content-Type", value)
-          when :location
-            header.add("Location", value)
-          when :cache
-            header.add("Cache-Control", value)
-          when :last_modified
-            header.add("Last-Modified", value)
-          end
+          header.add(header_label[type], value)
         end
-        
         header.add("Set-Cookie", send_sessions_to_cookie) unless has_session?
       end
       @@header = header
