@@ -23,7 +23,22 @@ module Amatista
       HTTP::Response.new 200, body, set_headers
     end
 
-    def add_headers(headers = {} of Symbol => String)
+    def add_cache_control(max_age = 31536000, public = true)
+      state = public ? "public" : "private"
+      add_headers({cache: "#{state}, max-age=#{max_age}"})
+    end
+
+    def add_last_modified(resource)
+      add_headers({last_modified: File.stat(resource).mtime.to_s})
+    end
+
+    def set_headers
+      headers = @@header
+      @@header = HTTP::Headers.new
+      headers || HTTP::Headers.new
+    end
+
+    private def add_headers(headers = {} of Symbol => String)
       @@header = HTTP::Headers.new unless @@header
     
       header = @@header
@@ -36,18 +51,14 @@ module Amatista
             header.add("Location", value)
           when :cache
             header.add("Cache-Control", value)
+          when :last_modified
+            header.add("Last-Modified", value)
           end
         end
         
         header.add("Set-Cookie", send_sessions_to_cookie) unless has_session?
       end
       @@header = header
-    end
-
-    def set_headers
-      headers = @@header
-      @@header = HTTP::Headers.new
-      headers || HTTP::Headers.new
     end
 
     # Find out the IP address

@@ -1,6 +1,11 @@
+require "./helpers"
+require "./sessions"
+
 module Amatista
   # This class is used as a base for running amatista apps.
   class Base
+    include Helpers
+    include Sessions
     # Saves the configure options in a global variable
     #
     # Example:
@@ -37,10 +42,9 @@ module Amatista
 
     # Process static file
     def process_static(path)
-      mime_type = Mime.from_ext(File.extname(path).gsub(".", ""))
-      file      = File.join($amatista.public_dir, path)
-      if File.exists?(file) && mime_type
-        HTTP::Response.ok(mime_type.to_s, File.read(file))
+      file = File.join($amatista.public_dir, path)
+      if File.exists?(file)
+        respond_to(File.extname(path).gsub(".", ""), File.read(file))
       end
     end
 
