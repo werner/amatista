@@ -43,7 +43,7 @@ module Amatista
     # Process static file
     def process_static(path)
       file = File.join($amatista.public_dir, path)
-      if File.exists?(file)
+      if File.exists?(file) && File.file?(file)
         respond_to(File.extname(path).gsub(".", ""), File.read(file))
       end
     end
