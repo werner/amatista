@@ -15,15 +15,21 @@ describe Helpers do
 
   it "sets last modified" do
     subject.get("/tests") do
-      subject.add_last_modified("#{__DIR__}/app/views/flash.ecr")
+      filename = "for_cache"
+      File.open(filename, "w") { |f| f.puts "Today" }
+      subject.add_last_modified(filename)
+      File.delete(filename)
       response = subject.respond_to(:text, "Hello Tests")
-    end.headers["Last-modified"].should eq("2015-09-03 16:30:39 UTC")
+    end.headers["Last-modified"].should match(/\d{4}-\d{2}-\d{2}.* UTC/)
   end
 
   it "sets etag" do
     subject.get("/tests") do
-      subject.add_etag("#{__DIR__}/app/views/flash.ecr")
+      filename = "for_cache"
+      File.open(filename, "w") { |f| f.puts "Today" }
+      subject.add_etag(filename)
+      File.delete(filename)
       response = subject.respond_to(:text, "Hello Tests")
-    end.headers["etag"].should eq("c9258ab64a3d9b2b9ba99faff002a395")
+    end.headers["etag"].length.should eq(32)
   end
 end

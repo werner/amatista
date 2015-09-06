@@ -33,7 +33,7 @@ describe Base do
       request = HTTP::Request.new "GET", "/", headers
 
       filename = "jquery.js"
-      File.open("jquery.js", "w") { |f| f.puts "jquery" }
+      File.open(filename, "w") { |f| f.puts "jquery" }
 
       content = app.process_static("jquery.js")
 
