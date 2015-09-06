@@ -26,13 +26,13 @@ module Amatista
 
     # Run the server, just needs a port number.
     def run(port)
-      server = HTTP::Server.new port, do |request|
-        p request if @@logs
-        static_response = process_static(request.path.to_s)
-        return static_response if static_response.is_a? HTTP::Response
-        process_request(request)
-      end
+      server = create_server(port)
       server.listen
+    end
+
+    def run_forked(port, workers = 8)
+      server = create_server(port)
+      server.listen_fork(workers)
     end
 
     # Process static file
@@ -74,6 +74,15 @@ module Amatista
         end
       end
       response_block
+    end
+
+    private def create_server(port)
+      HTTP::Server.new port, do |request|
+        p request if @@logs
+        static_response = process_static(request.path.to_s)
+        return static_response if static_response.is_a? HTTP::Response
+        process_request(request)
+      end
     end
   end
 end
