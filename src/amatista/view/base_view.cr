@@ -22,9 +22,7 @@ module Amatista
     end
 
     macro set_ecr(view_name, path = "src/views")
-      if File.directory?({{path}})
-        ecr_file "#{{{path}}}/#{{{view_name}}}.ecr"
-      end
+      ecr_file "#{{{path}}}/#{{{view_name}}}.ecr"
     end
   end
 end
