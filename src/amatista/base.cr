@@ -47,7 +47,10 @@ module Amatista
     def process_static(path)
       file = File.join($amatista.public_dir, path)
       if File.file?(file)
-        add_cache_control if $amatista.environment == :production
+        if $amatista.environment == :production
+          add_cache_control 
+          add_last_modified(file)
+        end
         respond_to(File.extname(path).gsub(".", ""), File.read(file))
       end
     end
