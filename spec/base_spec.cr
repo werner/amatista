@@ -55,6 +55,15 @@ describe Base do
 
       route.should be_nil
     end
+
+    it "generates a cached respond" do
+      $amatista.environment = :production
+      filename = "jquery.js"
+      File.open(filename, "w") { |f| f.puts "jquery" }
+      response = app.process_static("jquery.js")
+      response.headers["Cache-control"].should_not be_nil if response.is_a? HTTP::Response
+      File.delete(filename)
+    end
   end
 
 end

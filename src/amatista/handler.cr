@@ -16,6 +16,7 @@ module Amatista
     property database_driver
     property public_dir
     property flash
+    property environment
 
     def initialize
       @params              = {} of String => Array(String)
@@ -29,6 +30,7 @@ module Amatista
       @database_driver     = ""
       @public_dir          = Dir.working_directory
       @flash               = {} of Symbol => String
+      @environment         = :development
     end
   end
 end

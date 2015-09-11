@@ -6,6 +6,7 @@ module Amatista
   class Base
     include Helpers
     include Sessions
+
     # Saves the configure options in a global variable
     #
     # Example:
@@ -30,12 +31,14 @@ module Amatista
     end
 
     # Run the server, just needs a port number.
-    def run(port)
+    def run(port, environment = :development)
+      $amatista.environment = environment
       server = create_server(port)
       server.listen
     end
 
-    def run_forked(port, workers = 8)
+    def run_forked(port, environment = :development, workers = 8)
+      $amatista.environment = environment
       server = create_server(port)
       server.listen_fork(workers)
     end
@@ -44,6 +47,7 @@ module Amatista
     def process_static(path)
       file = File.join($amatista.public_dir, path)
       if File.file?(file)
+        add_cache_control if $amatista.environment == :production
         respond_to(File.extname(path).gsub(".", ""), File.read(file))
       end
     end
