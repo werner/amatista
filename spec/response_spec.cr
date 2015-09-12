@@ -57,6 +57,7 @@ describe Response do
   end
 
   context "#process_params" do
+    it "process params from path" do
       headers = HTTP::Headers.new
       headers["Host"] = "host.domain.com"
       headers["Body"] = ""
@@ -69,5 +70,6 @@ describe Response do
       route.request_path = "/tasks/edit/2/soon/34"
 
       response.process_params(route).should eq({"" => [""], "id" => ["2"], "other_task" => ["34"]})
+    end
   end
 end
