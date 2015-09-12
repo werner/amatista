@@ -19,7 +19,7 @@ module Amatista
     property environment
 
     def initialize
-      @params              = {} of String => Array(String)
+      @params              = {} of String => Hash(String, String)
       @routes              = [] of Route
       @filters             = [] of Filter
       @sessions            = {} of String => Hash(String, String)

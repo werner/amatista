@@ -8,13 +8,13 @@ module Amatista
     property request_path
 
     def initialize(@controller, @method, @path, @block)
-      @params = {} of String => Array(String)
+      @params = {} of String => Hash(String, String)
       @request_path = ""
     end
 
     # Get personalized params from routes defined by user
     def get_params
-      if @params.empty? || @request_path == ""
+      if @request_path == ""
         raise "You need to set params and request_path first"
       else
         extract_params_from_path
@@ -47,7 +47,7 @@ module Amatista
       params = @path.to_s.scan(/(:\w*)/).map(&.[](0))
       pairs  = @path.split("/").zip(@request_path.split("/"))
       pairs.select{|pair| params.includes?(pair[0])}.each do |p|
-        @params[p[0].gsub(/:/, "")] = [p[1]]
+        @params.merge!({p[0].gsub(/:/, "") => {p[1] => "true"}})
       end
     end
   end
