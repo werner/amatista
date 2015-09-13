@@ -42,7 +42,7 @@ describe Route do
       route.request_path = "/tasks/edit/2"
       route.add_params({"task" => {"description" => "some description"}})
 
-      route.get_params.should eq({"task" => {"description" => "some description"}, "id" => {"2" => "true"}})
+      route.get_params.should eq({"task" => {"description" => "some description"}, "id" => "2"})
     end
   end
 end

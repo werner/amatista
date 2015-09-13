@@ -69,7 +69,7 @@ describe Response do
                            ->(x : Hash(String, Hash(String, String) | String)){ @@response })
       route.request_path = "/tasks/edit/2/soon/34"
 
-      response.process_params(route).should eq({"id" => {"2" => "true"}, "other_task" => {"34" => "true"}})
+      response.process_params(route).should eq({"id" => "2", "other_task" => "34"})
     end
 
     it "process params from body request" do
