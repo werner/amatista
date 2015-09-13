@@ -19,26 +19,26 @@ module Amatista
     end
 
     #Convert params get from CGI to a Crystal Hash object
-    private def objectify_params(params) : Hash(String, Hash(String, String))
-      result = {} of String => Hash(String, String)
+    private def objectify_params(params) : Hash(String, Hash(String, String) | String)
+      result = {} of String => Hash(String, String) | String
       params.select {|k,v| k =~/\w*\[\w*\]/}
             .each do |key, value|
         object = key.match(/(\w*)\[(\w*)\]/) { |x| [x[1], x[2]] }
         if object.is_a?(Array(String))
           name, method = object
-          merge_same_key(result, name, method, value.first)
+          merge_same_key(result, name, method, value.first, result[name]?)
         end
       end
       params.reject {|k,v| k =~/\w*\[\w*\]/ || k == ""}
             .each do |key, value|
-        merge_same_key(result, key, value.first, "true")
+        result.merge!({key => value.first})
       end
       result
     end
 
-    private def merge_same_key(result, name, method, value)
-      if result[name]?
-        result[name].merge!({method => value})
+    private def merge_same_key(result, name, method, value, child : Hash(String, String) | String | Nil)
+      if child.is_a?(Hash(String, String))
+        child.merge!({method => value})
       else
         result.merge!({name => {method => value}})
       end

@@ -8,7 +8,7 @@ module Amatista
     property request_path
 
     def initialize(@controller, @method, @path, @block)
-      @params = {} of String => Hash(String, String)
+      @params = {} of String => Hash(String, String) | String
       @request_path = ""
     end
 
