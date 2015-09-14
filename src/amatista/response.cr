@@ -12,21 +12,22 @@ module Amatista
       routes.find {|route_request| route_request.method == method && route_request.match_path?(path_to_find) }
     end
 
-    def process_params(route)
+    def process_params(route) : Hash(String, Hash(String, String | Array(String)) | String | Array(String))
       route.request_path = @request.path.to_s
       route.add_params(objectify_params(CGI.parse(@request.body.to_s)))
       route.get_params
     end
 
     #Convert params get from CGI to a Crystal Hash object
-    private def objectify_params(params) : Hash(String, Hash(String, String) | String)
-      result = {} of String => Hash(String, String) | String
+    private def objectify_params(params) : Hash(String, Hash(String, String | Array(String)) | String | Array(String))
+      result = {} of String => Hash(String, String | Array(String)) | String | Array(String)
       params.select {|k,v| k =~/\w*\[\w*\]/}
             .each do |key, value|
         object = key.match(/(\w*)\[(\w*)\]/) { |x| [x[1], x[2]] }
         if object.is_a?(Array(String))
           name, method = object
-          merge_same_key(result, name, method, value.first, result[name]?)
+          final_value = value.count > 1 ? value : value.first
+          merge_same_key(result, name, method, final_value, result[name]?)
         end
       end
       params.reject {|k,v| k =~/\w*\[\w*\]/ || k == ""}
@@ -36,8 +37,11 @@ module Amatista
       result
     end
 
-    private def merge_same_key(result, name, method, value, child : Hash(String, String) | String | Nil)
-      if child.is_a?(Hash(String, String))
+    private def merge_same_key(result, name, method, value : String | Array(String), 
+                               child : Hash(String, String | Array(String)) | String | Nil)
+
+      case child
+      when Hash(String, String | Array(String))
         child.merge!({method => value})
       else
         result.merge!({name => {method => value}})

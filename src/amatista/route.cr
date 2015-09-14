@@ -8,7 +8,7 @@ module Amatista
     property request_path
 
     def initialize(@controller, @method, @path, @block)
-      @params = {} of String => Hash(String, String) | String
+      @params = {} of String => Hash(String, String | Array(String)) | String | Array(String)
       @request_path = ""
     end
 
@@ -37,7 +37,7 @@ module Amatista
     end
 
     # Add personalized params to the coming from requests
-    def add_params(params)
+    def add_params(params : Hash(String, Hash(String, String | Array(String)) | String | Array(String)))
       params.each do |key, value|
         @params[key] = value
       end

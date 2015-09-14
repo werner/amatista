@@ -7,28 +7,29 @@ describe Route do
 
   context "#match_path?" do
     it "match the root path to true" do
-      route = Route.new(nil, "GET", "/", ->(params : Hash(String, Hash(String, String) | String)) { @@response })
+      route = Route.new(nil, "GET", "/", 
+                        ->(params : Hash(String, Hash(String, String | Array(String)) | String | Array(String))) { @@response })
 
       route.match_path?("/").should eq(true)
     end
   
     it "match /tasks/edit/:id with /tasks/edit/2" do
       route = Route.new(nil, "GET", "/tasks/edit/:id", 
-                        ->(params : Hash(String, Hash(String, String) | String)) { @@response })
+                        ->(params : Hash(String, Hash(String, String | Array(String)) | String | Array(String))) { @@response })
 
       route.match_path?("/tasks/edit/2").should eq(true)
     end
 
     it "match /tasks/edit/:id with /tasks/edit/2/" do
       route = Route.new(nil, "GET", "/tasks/edit/:id", 
-                        ->(params : Hash(String, Hash(String, String) | String)) { @@response })
+                        ->(params : Hash(String, Hash(String, String | Array(String)) | String | Array(String))) { @@response })
 
       route.match_path?("/tasks/edit/2/").should eq(true)
     end
 
     it "does not match /tasks/edit/:id with /tasks/edit/2" do
       route = Route.new(nil, "GET", "/tasks/edit/:id", 
-                        ->(params : Hash(String, Hash(String, String) | String)) { @@response })
+                        ->(params : Hash(String, Hash(String, String | Array(String)) | String | Array(String))) { @@response })
 
       route.match_path?("/tasks/edit/2/show").should eq(false)
     end
@@ -37,12 +38,15 @@ describe Route do
   context "#get_params" do
     it "extracts params from /tasks/edit/:id" do
       route = Route.new(nil, "GET", "/tasks/edit/:id", 
-                        ->(params : Hash(String, Hash(String, String) | String)) { @@response })
+                        ->(params : Hash(String, Hash(String, String | Array(String)) | String | Array(String))) { @@response })
 
       route.request_path = "/tasks/edit/2"
-      route.add_params({"task" => {"description" => "some description"}})
+      params = {} of String => Hash(String, String | Array(String)) | String | Array(String)
+      params = {"task" => {"description" => "some description", "taxonomy_ids" => ["1", "2"]}}
+      route.add_params(params)
 
-      route.get_params.should eq({"task" => {"description" => "some description"}, "id" => "2"})
+      route.get_params.should eq({"task" => {"description" => "some description", 
+                                             "taxonomy_ids" => ["1", "2"]}, "id" => "2"})
     end
   end
 end
