@@ -73,7 +73,9 @@ module Amatista
       end
     end
 
-    def process_filter(route) : (Nil | (-> HTTP::Response))
+    # This will search for the filters callbacks, if it's an HTTP::Response,
+    # it will be returned, at the other hand will be executed
+    private def process_filter(route) : (Nil | (-> HTTP::Response))
       filters = Filter.find($amatista.filters, route.controller, route.path)
       response_block = nil
       filters.each do |filter|
