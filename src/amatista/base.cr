@@ -63,30 +63,16 @@ module Amatista
         route = Response.find_route($amatista.routes, request.method, request.path.to_s)
         return HTTP::Response.not_found unless route
 
-        filter = process_filter(route)
-        return filter.call() if filter.is_a?(-> HTTP::Response)
+        filter = Filter.find_response($amatista.filters, route.controller, route.path)
+        return filter.block.call() if filter
+
+        Filter.execute_blocks($amatista.filters, route.controller, route.path)
 
         $amatista.params  = response.process_params(route)
         route.block.call($amatista.params)
       rescue e
         HTTP::Response.error "text/plain", "Error: #{e}"
       end
-    end
-
-    # This will search for the filters callbacks, if it's an HTTP::Response,
-    # it will be returned, at the other hand will be executed
-    private def process_filter(route) : (Nil | (-> HTTP::Response))
-      filters = Filter.find($amatista.filters, route.controller, route.path)
-      response_block = nil
-      filters.each do |filter|
-        block = filter.block
-        if block.is_a?(-> HTTP::Response) && filter.condition.call()
-          response_block = block
-        else
-          block.call()
-        end
-      end
-      response_block
     end
 
     private def create_server(port)
