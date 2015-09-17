@@ -6,7 +6,7 @@ module Amatista
     property controller
     property condition
 
-    def initialize(@controller, @paths, @condition, @block : (-> Hash(String, String)))
+    def initialize(@controller, @paths, @condition, @block : T)
     end
 
     # Finds the filters based on the controller or the ApplicationController father
