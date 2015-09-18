@@ -63,8 +63,8 @@ module Amatista
         route = Response.find_route($amatista.routes, request.method, request.path.to_s)
         return HTTP::Response.not_found unless route
 
-        filter = Filter.find_response($amatista.filters, route.controller, route.path)
-        return filter.block.call() if filter
+        response_filter = Filter.find_response($amatista.filters, route.controller, route.path)
+        return response_filter.try &.call() if response_filter.is_a?(-> HTTP::Response) 
 
         Filter.execute_blocks($amatista.filters, route.controller, route.path)
 

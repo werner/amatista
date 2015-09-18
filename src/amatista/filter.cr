@@ -32,10 +32,13 @@ module Amatista
 
     #Find a filter that has a block as an HTTP::Response return's value
     def self.find_response(filters, controller, path)
-      filters.find do |filter|
-        check_controller(filter.controller, controller) &&
-          (filter.paths.includes?(path) || filter.paths.empty?) &&
-          (filter.block.is_a?(-> HTTP::Response) && filter.condition.call())
+      filters.each do |filter|
+        block = filter.block
+        if check_controller(filter.controller, controller) &&
+            (filter.paths.includes?(path) || filter.paths.empty?) &&
+            (filter.block.is_a?(-> HTTP::Response) && filter.condition.call())
+          return block
+        end
       end
     end
 
