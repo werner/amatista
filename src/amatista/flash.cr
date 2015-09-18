@@ -6,9 +6,9 @@ module Amatista
     end
 
     def get_flash(key)
-      tmp = $amatista.flash[key]?
+      flash_value = $amatista.flash[key]?
       $amatista.flash.delete(key)
-      tmp
+      flash_value
     end
   end
 end
