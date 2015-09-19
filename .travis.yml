@@ -1,4 +1,10 @@
 language: crystal
+
+before_install: |
+  mkdir -p .bin 
+  curl -L https://github.com/ysbaddaden/shards/releases/download/v0.4.0/shards-0.4.0_linux_amd64.tar.gz | tar xz -C .bin
+  export PATH=".bin:$PATH"
+
 branches:
   only:
     - master
