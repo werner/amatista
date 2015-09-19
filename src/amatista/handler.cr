@@ -5,6 +5,8 @@ require "./route"
 module Amatista
   # Use to saves configuration, routes and other data needed for the application.
   class Handler
+    alias ParamsValue = Hash(String, String | Array(String)) | String | Array(String)
+    alias Params      = Hash(String, ParamsValue)
     property params
     property routes
     property filters
@@ -19,7 +21,7 @@ module Amatista
     property environment
 
     def initialize
-      @params              = {} of String => Hash(String, String | Array(String)) | String | Array(String)
+      @params              = {} of String => ParamsValue
       @routes              = [] of Route
       @filters             = [] of Filter
       @sessions            = {} of String => Hash(String, String)
