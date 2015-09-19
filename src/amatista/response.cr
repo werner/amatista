@@ -26,7 +26,7 @@ module Amatista
         object = key.match(/(\w*)\[(\w*)\]/) { |x| [x[1], x[2]] }
         if object.is_a?(Array(String))
           name, method = object
-          final_value = value.count > 1 ? value : value.first
+          final_value = value.size > 1 ? value : value.first
           merge_same_key(result, name, method, final_value, result[name]?)
         end
       end

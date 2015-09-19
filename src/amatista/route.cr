@@ -30,7 +30,7 @@ module Amatista
       original_path = @path.split("/") - [""]
       path_to_match = path.split("/") - [""]
 
-      original_path.length == path_to_match.length &&
+      original_path.size == path_to_match.size &&
         original_path.zip(path_to_match).all? do |item|
           item[0].match(/(:\w*)/) ? true : item[0] == item[1] 
         end

@@ -30,6 +30,6 @@ describe Helpers do
       subject.add_etag(filename)
       File.delete(filename)
       response = subject.respond_to(:text, "Hello Tests")
-    end.headers["etag"].length.should eq(32)
+    end.headers["etag"].size.should eq(32)
   end
 end
