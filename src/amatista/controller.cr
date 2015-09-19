@@ -11,7 +11,7 @@ module Amatista
     macro inherited
       # Creates 5 methods to handle the http requests from the browser.
       {% for method in %w(get post put delete patch) %}
-        def self.{{method.id}}(path : String, &block : Handler::Params -> HTTP::Response)
+        def self.{{method.id}}(path : String, &block : Amatista::Handler::Params -> HTTP::Response)
           $amatista.routes << Amatista::Route.new({{@type}}, "{{method.id}}".upcase, path, block)
           yield($amatista.params)
         end
