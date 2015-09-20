@@ -2,3 +2,4 @@
 .deps/*
 .deps.lock
 libs/*
+.shards/*

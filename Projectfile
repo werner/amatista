@@ -1,4 +1,0 @@
-deps do
-  github "spalger/crystal-mime"
-  github "manastech/webmock.cr"
-end

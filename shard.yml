@@ -1,0 +1,14 @@
+name: shards
+version: 0.4.0
+
+dependencies:
+  mime:
+    github: spalger/crystal-mime
+
+development_dependencies:
+  webmock:
+    github: manastech/webmock.cr
+
+license: MIT
+
+

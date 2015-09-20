@@ -1,0 +1,10 @@
+version: 1.0
+shards:
+  crystal-mime:
+    github: spalger/crystal-mime
+    version: HEAD
+
+  webmock.cr:
+    github: manastech/webmock.cr
+    version: HEAD
+
