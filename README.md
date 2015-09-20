@@ -2,13 +2,16 @@
 
 This is a web framework build in [Crystal](https://github.com/manastech/crystal) to create quick applications.
 
-### Projectfile
+### Shard file
 
-```crystal
-deps do
-  github "werner/amatista"
-  github "spalger/crystal-mime"
-end
+shard.yml
+```yml
+name: shards
+version: 0.4.0
+
+dependencies:
+  amatista:
+    github: werner/amatista
 ```
 
 ### Basic Usage
