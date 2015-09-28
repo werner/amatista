@@ -58,6 +58,7 @@ module Amatista
                       location:      "Location",
                       cache:         "Cache-Control",
                       last_modified: "Last-Modified",
+                      disposition:   "Content-Disposition",
                       etag:          "ETag"}
     
       header = @@header
