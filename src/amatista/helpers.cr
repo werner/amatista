@@ -24,6 +24,12 @@ module Amatista
       HTTP::Response.new 200, body, set_headers
     end
 
+    # Send data as attachment
+    def send_data(body, filename, disposition="attachment")
+      add_headers :context, "attachment; filename='#{filename}'"
+      HTTP::Response.new 200, body, set_headers
+    end
+
     def add_cache_control(max_age = 31536000, public = true)
       state = public ? "public" : "private"
       add_headers :cache, "#{state}, max-age=#{max_age}"
