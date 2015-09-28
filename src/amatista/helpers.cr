@@ -26,7 +26,7 @@ module Amatista
 
     # Send data as attachment
     def send_data(body, filename, disposition="attachment")
-      add_headers :context, "attachment; filename='#{filename}'"
+      add_headers :disposition, "attachment; filename='#{filename}'"
       HTTP::Response.new 200, body, set_headers
     end
 
