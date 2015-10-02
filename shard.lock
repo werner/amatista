@@ -6,5 +6,5 @@ shards:
 
   webmock:
     github: manastech/webmock.cr
-    version: HEAD
+    version: 0.1.0
 
