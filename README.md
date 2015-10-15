@@ -6,8 +6,8 @@ This is a web framework build in [Crystal](https://github.com/manastech/crystal)
 
 shard.yml
 ```yml
-name: amatista
-version: 0.4.1
+name: myapp
+version: 0.0.1
 
 dependencies:
   amatista:
