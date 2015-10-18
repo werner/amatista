@@ -18,7 +18,7 @@ module Amatista
 
     private def input_tag(raw_options)
       options = options_transfomed(raw_options)
-      str_result = StringIO.new
+      str_result = MemoryIO.new
       yield(str_result)
       str_result << " #{options}" unless options.empty?
       str_result << " />"
@@ -27,7 +27,7 @@ module Amatista
 
     private def surrounded_tag(tag, value, raw_options)
       options = options_transfomed(raw_options)
-      str_result = StringIO.new
+      str_result = MemoryIO.new
       str_result << "<#{tag.to_s}"
       yield(str_result)
       str_result << " #{options}" unless options.empty?
