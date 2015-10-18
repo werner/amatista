@@ -65,11 +65,11 @@ module Amatista
 
     def form_tag(url, method = "post", raw_options = [] of Hash(Symbol, String))
       options = options_transfomed(raw_options)
-      str_result = StringIO.new
+      str_result = MemoryIO.new
       str_result << "<form action=\"#{HTML.escape(url)}\" method=\"#{HTML.escape(method)}\""
       str_result << " #{options}" unless options.empty?
       str_result << ">"
-      str_body_result = StringIO.new
+      str_body_result = MemoryIO.new
       str_result << yield(str_body_result)
       str_result << "</form>"
       str_result.to_s
