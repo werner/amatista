@@ -1,4 +1,3 @@
-require "cgi"
 require "http/server"
 require "./route"
 

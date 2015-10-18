@@ -1,3 +1,4 @@
+require "uri"
 require "mime"
 
 module Amatista
@@ -14,13 +15,20 @@ module Amatista
 
     def process_params(route) : Handler::Params
       route.request_path = @request.path.to_s
-      route.add_params(objectify_params(CGI.parse(@request.body.to_s)))
+      route.add_params(objectify_params(@request.body.to_s))
       route.get_params
     end
 
     #Convert params get from CGI to a Crystal Hash object
-    private def objectify_params(params) : Handler::Params
+    private def objectify_params(raw_params) : Handler::Params
       result = {} of String => Handler::ParamsValue
+      params = {} of String => Array(String)
+
+      HTTP::Params.parse(raw_params) do |key, value|
+        ary = params[key] ||= [] of String
+        ary.push value
+      end
+
       params.select {|k,v| k =~/\w*\[\w*\]/}
             .each do |key, value|
         object = key.match(/(\w*)\[(\w*)\]/) { |x| [x[1], x[2]] }
