@@ -29,18 +29,15 @@ module Amatista
         ary.push value
       end
 
-      params.select {|k,v| k =~/\w*\[\w*\]/}
-            .each do |key, value|
+      params.each do |key, value|
         object = key.match(/(\w*)\[(\w*)\]/) { |x| [x[1], x[2]] }
         if object.is_a?(Array(String))
           name, method = object
           final_value = value.size > 1 ? value : value.first
           merge_same_key(result, name, method, final_value, result[name]?)
+        elsif object.nil?
+          result.merge!({key => value.first})
         end
-      end
-      params.reject {|k,v| k =~/\w*\[\w*\]/ || k == ""}
-            .each do |key, value|
-        result.merge!({key => value.first})
       end
       result
     end
