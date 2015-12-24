@@ -3,7 +3,7 @@ version: 0.4.1
 
 dependencies:
   mime:
-    github: spalger/crystal-mime
+    github: werner/crystal-mime
 
 development_dependencies:
   webmock:

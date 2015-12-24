@@ -29,7 +29,7 @@ module Amatista
       @request             = nil
       @database_connection = ""
       @database_driver     = ""
-      @public_dir          = Dir.working_directory
+      @public_dir          = Dir.current
       @flash               = {} of Symbol => String
       @environment         = :development
     end

@@ -1,3 +1,5 @@
+require "html"
+
 module Amatista
   # Set of helpers for the tag views
   module ViewHelpers
