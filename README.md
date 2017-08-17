@@ -1,5 +1,8 @@
 # Amatista [![Build Status](https://travis-ci.org/werner/amatista.png)](https://travis-ci.org/werner/amatista) [![docrystal.org](http://www.docrystal.org/badge.svg?style=round)](http://www.docrystal.org/github.com/werner/amatista)
 
+# Deprecated!. 
+## you want to use [Kemal](https://github.com/kemalcr/kemal)  instead
+
 This is a web framework build in [Crystal](https://github.com/manastech/crystal) to create quick applications.
 
 ### Shard file
